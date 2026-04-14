@@ -25,5 +25,15 @@
     "strictNullChecks": false
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "playwright-fixture.ts", "playwright.config.ts", "**/*.test.ts", "**/*.spec.ts", "dist", ".next"]
+  "exclude": [
+    "node_modules",
+    "server",
+    "supabase",
+    "dist",
+    ".next",
+    "playwright-fixture.ts",
+    "playwright.config.ts",
+    "**/*.test.ts",
+    "**/*.spec.ts"
+  ]
 }
