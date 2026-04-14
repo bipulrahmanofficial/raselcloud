@@ -674,16 +674,16 @@ interface LanguageContextType {
 }
 
 const LanguageContext = createContext<LanguageContextType>({
-  lang: "en",
+  lang: "bn",
   setLang: () => {},
-  t: translations.en,
+  t: translations.bn,
 });
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  // Always start with "en" so server HTML matches the first client render.
-  // We track `hydrated` separately to ensure we NEVER change the language
-  // while React is still reconciling Suspense boundaries.
-  const [lang, setLangState] = useState<Lang>("en");
+  // Start with 'bn' so server HTML matches Bengali-first platform.
+  // All public-facing text uses suppressHydrationWarning to handle
+  // any edge cases where the stored preference differs.
+  const [lang, setLangState] = useState<Lang>("bn");
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -720,9 +720,9 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("lang", newLang);
   };
 
-  // During hydration, always expose "en" regardless of detected lang.
-  // After hydration is confirmed complete, expose the real lang.
-  const effectiveLang: Lang = hydrated ? lang : "en";
+  // During hydration, expose the stored lang (or bn default).
+  // After hydration, always expose real lang.
+  const effectiveLang: Lang = lang;
 
   return (
     <LanguageContext.Provider value={{ lang: effectiveLang, setLang: handleSetLang, t: translations[effectiveLang] }}>

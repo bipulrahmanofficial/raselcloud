@@ -218,6 +218,10 @@ const AdminSettings = () => {
           <Field label="Happy Clients" name="statsClients" value={settings.statsClients ?? ""} onChange={set} placeholder="80+" />
           <Field label="Years Experience" name="statsYears" value={settings.statsYears ?? ""} onChange={set} placeholder="5+" />
           <Field label="Client Satisfaction" name="statsSatisfaction" value={settings.statsSatisfaction ?? ""} onChange={set} placeholder="99%" />
+          <BilingualField label="Stats Section Tagline" nameEn="statsTagline" nameBn="statsTagline_bn"
+            valueEn={String(settings.statsTagline ?? "")} valueBn={String(settings.statsTagline_bn ?? "")}
+            onChange={(n, v) => set(n, v)} placeholder="Numbers that speak for themselves"
+            placeholderBn="সংখ্যাই বলে দেয় সব কিছু" />
         </div>
       );
 
@@ -230,8 +234,18 @@ const AdminSettings = () => {
 
       case "seo": return (
         <div>
-          <Field label="Meta Title" description="Browser tab & Google search title" name="metaTitle" value={settings.metaTitle ?? ""} onChange={set} placeholder="rasel.cloud — Digital Agency" />
-          <Field label="Meta Description" description="Google search result description (150–160 chars)" name="metaDescription" value={settings.metaDescription ?? ""} onChange={set} type="textarea" placeholder="Professional web development, AI automation, SEO services..." />
+          <BilingualField label="Meta Title" nameEn="metaTitle" nameBn="metaTitle_bn"
+            valueEn={String(settings.metaTitle ?? "")} valueBn={String(settings.metaTitle_bn ?? "")}
+            onChange={(n, v) => set(n, v)}
+            description="Browser tab & Google search title"
+            placeholder="rasel.cloud — Digital Agency"
+            placeholderBn="রাসেল ক্লাউড — ডিজিটাল এজেন্সি" />
+          <BilingualField label="Meta Description" nameEn="metaDescription" nameBn="metaDescription_bn"
+            valueEn={String(settings.metaDescription ?? "")} valueBn={String(settings.metaDescription_bn ?? "")}
+            onChange={(n, v) => set(n, v)} type="textarea"
+            description="Google search result description (150–160 chars)"
+            placeholder="Professional web development, AI automation, SEO services..."
+            placeholderBn="পেশাদার ওয়েব ডেভেলপমেন্ট, এআই অটোমেশন, এসইও সেবা..." />
           <Field label="Google Analytics ID" description="e.g. G-XXXXXXXXXX or UA-XXXXXXX" name="googleAnalyticsId" value={settings.googleAnalyticsId ?? ""} onChange={set} placeholder="G-XXXXXXXXXX" />
           <Field label="Facebook Pixel ID" name="facebookPixelId" value={settings.facebookPixelId ?? ""} onChange={set} placeholder="1234567890" />
         </div>

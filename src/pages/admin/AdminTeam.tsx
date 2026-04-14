@@ -136,7 +136,12 @@ const AdminTeam = () => {
       if (!r.ok) throw new Error("Failed");
       return r.json();
     },
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ["/api/admin/team"] }); setModal({ open: false, member: empty() }); toast.success("Saved!"); },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["/api/admin/team"] });
+      qc.invalidateQueries({ queryKey: ["/api/team"] });
+      setModal({ open: false, member: empty() });
+      toast.success("Saved!");
+    },
     onError: () => toast.error("Failed to save"),
   });
 
@@ -145,7 +150,11 @@ const AdminTeam = () => {
       const r = await apiFetch(`/api/admin/team/${id}`, { method: "DELETE" });
       if (!r.ok) throw new Error("Failed");
     },
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ["/api/admin/team"] }); toast.success("Removed"); },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["/api/admin/team"] });
+      qc.invalidateQueries({ queryKey: ["/api/team"] });
+      toast.success("Removed");
+    },
     onError: () => toast.error("Delete failed"),
   });
 

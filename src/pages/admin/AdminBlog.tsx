@@ -29,6 +29,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Plus, Pencil, Trash2, Eye, EyeOff } from "lucide-react";
 import AdminLayout from "@/components/admin/AdminLayout";
+import { BilingualField } from "@/components/admin/BilingualField";
 
 interface BlogPost {
   id: string;
@@ -47,7 +48,9 @@ interface BlogPost {
 interface PostForm {
   slug: string;
   title: string;
+  title_bn: string;
   excerpt: string;
+  excerpt_bn: string;
   content: string;
   coverImage: string;
   tags: string;
@@ -57,7 +60,9 @@ interface PostForm {
 const emptyForm: PostForm = {
   slug: "",
   title: "",
+  title_bn: "",
   excerpt: "",
+  excerpt_bn: "",
   content: "",
   coverImage: "",
   tags: "",
@@ -165,7 +170,9 @@ export default function AdminBlog() {
     setForm({
       slug: post.slug,
       title: post.title,
+      title_bn: (post as unknown as { title_bn?: string }).title_bn ?? "",
       excerpt: post.excerpt,
+      excerpt_bn: (post as unknown as { excerpt_bn?: string }).excerpt_bn ?? "",
       content: "",
       coverImage: post.coverImage ?? "",
       tags: post.tags.join(", "),
@@ -264,24 +271,21 @@ export default function AdminBlog() {
           </DialogHeader>
           <div className="space-y-4 py-2">
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <Label htmlFor="post-title">Title *</Label>
-                <Input
-                  id="post-title"
-                  data-testid="input-post-title"
-                  value={form.title}
-                  onChange={(e) => {
-                    const title = e.target.value;
+              <div className="space-y-1.5 col-span-2">
+                <BilingualField
+                  label="Title" required nameEn="title" nameBn="title_bn"
+                  valueEn={form.title} valueBn={form.title_bn}
+                  onChange={(k, v) => {
                     setForm((f) => ({
                       ...f,
-                      title,
-                      slug: f.slug || slugify(title),
+                      [k]: v,
+                      ...(k === "title" && !f.slug ? { slug: slugify(v) } : {}),
                     }));
                   }}
-                  placeholder="My Awesome Post"
+                  placeholder="My Awesome Post" placeholderBn="আমার চমৎকার পোস্ট"
                 />
               </div>
-              <div className="space-y-1.5">
+              <div className="space-y-1.5 col-span-2">
                 <Label htmlFor="post-slug">Slug *</Label>
                 <Input
                   id="post-slug"
@@ -292,17 +296,14 @@ export default function AdminBlog() {
                 />
               </div>
             </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="post-excerpt">Excerpt</Label>
-              <Textarea
-                id="post-excerpt"
-                data-testid="input-post-excerpt"
-                value={form.excerpt}
-                onChange={(e) => setForm((f) => ({ ...f, excerpt: e.target.value }))}
-                placeholder="Short summary shown on the blog listing page..."
-                rows={2}
-              />
-            </div>
+            <BilingualField
+              label="Excerpt" nameEn="excerpt" nameBn="excerpt_bn"
+              valueEn={form.excerpt} valueBn={form.excerpt_bn}
+              onChange={(k, v) => setForm((f) => ({ ...f, [k]: v }))}
+              type="textarea" rows={2}
+              placeholder="Short summary shown on the blog listing page..."
+              placeholderBn="ব্লগ তালিকা পেজে দেখানো সংক্ষিপ্ত বিবরণ..."
+            />
             <div className="space-y-1.5">
               <Label htmlFor="post-content">Content (Markdown supported)</Label>
               <Textarea
