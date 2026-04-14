@@ -374,8 +374,20 @@ const Navbar = () => {
             >
               {/* Sidebar header */}
               <div className="flex items-center gap-2 px-5 h-14 border-b border-border/20 shrink-0">
-                <Sparkles size={14} className="text-primary shrink-0" />
-                <span className="font-bold gradient-text">rasel.cloud</span>
+                {logoUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={logoUrl}
+                    alt={siteName}
+                    className="h-7 w-auto object-contain max-w-[120px]"
+                    onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                  />
+                ) : (
+                  <>
+                    <Sparkles size={14} className="text-primary shrink-0" />
+                    <span className="font-bold gradient-text" suppressHydrationWarning>{siteName}</span>
+                  </>
+                )}
               </div>
 
               {/* Auth CTA — replaces the 4-icon grid */}
