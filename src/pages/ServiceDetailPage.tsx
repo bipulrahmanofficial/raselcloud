@@ -19,7 +19,8 @@ const categoryIcons: Record<string, string> = {
 };
 
 const ServiceDetailPage = () => {
-  const { slug } = useParams<{ slug: string }>();
+  const params = useParams<{ slug: string }>();
+  const slug = params?.slug ?? "";
   const { data: service, isLoading, isError } = useService(slug || "");
   const lv = useLangValue();
 
