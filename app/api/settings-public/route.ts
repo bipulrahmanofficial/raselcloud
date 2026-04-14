@@ -6,9 +6,12 @@ const SETTINGS_FILE = path.join(process.cwd(), "scripts", "site-settings.json");
 
 /** Public fields exposed to all visitors (no auth required) */
 const PUBLIC_FIELDS = new Set([
+  // Branding
   "siteName", "siteName_bn",
   "tagline", "tagline_bn",
+  "logoUrl", "faviconUrl",
   // Hero section
+  "heroImageUrl",
   "heroHeading", "heroHeading_bn",
   "heroSubheading", "heroSubheading_bn",
   "heroCtaText", "heroCtaText_bn",
@@ -33,7 +36,6 @@ const PUBLIC_FIELDS = new Set([
   "statsTagline", "statsTagline_bn",
   "metaTitle", "metaTitle_bn",
   "metaDescription", "metaDescription_bn",
-  "logoUrl", "faviconUrl",
   "primaryColor", "accentColor",
 ]);
 
@@ -42,6 +44,7 @@ function getDefaults(): Record<string, string | boolean> {
     siteName: "rasel.cloud",
     tagline: "Digital Agency & Web Solutions",
     // Hero section
+    heroImageUrl: "",
     heroHeading: "",
     heroSubheading: "Custom web solutions, AI automation, SEO growth & creative media — built for businesses of every scale.",
     heroSubheading_bn: "কাস্টম ওয়েব সমাধান, এআই অটোমেশন, এসইও গ্রোথ — সব আকারের ব্যবসার জন্য তৈরি।",

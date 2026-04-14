@@ -187,19 +187,29 @@ const AdminSettings = () => {
 
       case "hero": return (
         <div>
-          <p className="text-xs text-white/40 pb-3 border-b border-white/5 mb-1">
+          <p className="text-xs text-white/40 pb-3 border-b border-white/5 mb-3">
             Changes here are saved and immediately shown on the public website via <code className="bg-white/10 px-1 rounded">/api/settings-public</code>.
             Leave any field blank to use the default translation text.
           </p>
+
+          {/* Hero Image */}
+          <ImageUploadField
+            label="Hero Section Image"
+            description="Right-side image in the hero section. Default: /hero-main.jpg"
+            value={String(settings.heroImageUrl ?? "")}
+            onChange={(url) => set("heroImageUrl", url)}
+            placeholder="/hero-main.jpg or https://..."
+          />
+
           <BilingualField label="Hero Heading" nameEn="heroHeading" nameBn="heroHeading_bn"
             valueEn={String(settings.heroHeading ?? "")} valueBn={String(settings.heroHeading_bn ?? "")}
             onChange={(n, v) => set(n, v)} type="textarea"
-            placeholder="We Build, Grow & Transform Your Digital Presence."
+            placeholder="We Build, Grow &amp; Transform Your Digital Presence."
             placeholderBn="আপনার ডিজিটাল উপস্থিতি তৈরি, বৃদ্ধি ও রূপান্তর করি।" />
           <BilingualField label="Hero Subheading" nameEn="heroSubheading" nameBn="heroSubheading_bn"
             valueEn={String(settings.heroSubheading ?? "")} valueBn={String(settings.heroSubheading_bn ?? "")}
             onChange={(n, v) => set(n, v)} type="textarea"
-            placeholder="Custom websites, AI automation, SEO & social media management..."
+            placeholder="Custom websites, AI automation, SEO &amp; social media management..."
             placeholderBn="কাস্টম ওয়েবসাইট, এআই অটোমেশন, এসইও ও সোশ্যাল মিডিয়া ম্যানেজমেন্ট..." />
 
           <div className="pt-3 pb-2 border-b border-white/5">

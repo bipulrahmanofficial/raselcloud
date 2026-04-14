@@ -9,7 +9,7 @@ import {
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useCart } from "@/contexts/CartContext";
@@ -44,6 +44,19 @@ const Navbar = () => {
     setMounted(true);
     setIsDark(document.documentElement.classList.contains("dark"));
   }, []);
+
+  // Fetch branding from public settings
+  const { data: branding } = useQuery<Record<string, string>>({
+    queryKey: ["/api/settings-public"],
+    queryFn: async () => {
+      const r = await fetch("/api/settings-public");
+      if (!r.ok) return {};
+      return r.json();
+    },
+    staleTime: 60_000,
+  });
+  const logoUrl  = branding?.logoUrl  || "";
+  const siteName = branding?.siteName || "rasel.cloud";
 
   const toggleTheme = () => {
     const next = !isDark;
@@ -134,8 +147,21 @@ const Navbar = () => {
           >
             <Menu size={22} />
           </button>
-          <Link href="/" className="text-xl font-bold gradient-text shrink-0">
-            rasel.cloud
+          {/* Logo: shows uploaded image if set, otherwise site name text */}
+          <Link href="/" className="flex items-center gap-2 shrink-0" aria-label="Home">
+            {logoUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={logoUrl}
+                alt={siteName}
+                className="h-8 w-auto object-contain max-w-[140px]"
+                onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+              />
+            ) : (
+              <span className="text-xl font-bold gradient-text" suppressHydrationWarning>
+                {siteName}
+              </span>
+            )}
           </Link>
         </div>
 

@@ -526,7 +526,7 @@ const HeroSection = () => {
                 style={{ outline: "1px solid rgba(255,255,255,0.07)" }}
               >
                 <Image
-                  src="/hero-main.jpg"
+                  src={settings?.heroImageUrl || "/hero-main.jpg"}
                   alt="Creative professionals collaborating with laptops"
                   width={560}
                   height={400}
@@ -534,6 +534,7 @@ const HeroSection = () => {
                   className="w-full h-auto object-cover"
                   priority
                   fetchPriority="high"
+                  unoptimized={!!(settings?.heroImageUrl && settings.heroImageUrl.startsWith("/uploads/"))}
                 />
                 <div
                   className="absolute inset-0 pointer-events-none block dark:hidden"
