@@ -623,32 +623,34 @@ const LanguageContext = createContext<LanguageContextType>({
   t: translations.en,
 });
 
-function getInitialLang(): Lang {
-  if (typeof localStorage === "undefined") return "en";
-  const stored = localStorage.getItem("lang");
-  if (stored === "bn" || stored === "en") return stored as Lang;
-  const country = localStorage.getItem("rc_country");
-  if (country === "BD") return "bn";
-  return "en";
-}
-
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [lang, setLang] = useState<Lang>(getInitialLang);
+  // Always start with "en" so server HTML matches the first client render (no hydration mismatch).
+  // After mount we read localStorage and switch if needed.
+  const [lang, setLangState] = useState<Lang>("en");
 
   useEffect(() => {
-    if (typeof localStorage === "undefined") return;
+    // Step 1: restore stored preference
     const stored = localStorage.getItem("lang");
-    if (stored === "bn" || stored === "en") return;
+    if (stored === "bn" || stored === "en") {
+      setLangState(stored as Lang);
+      return;
+    }
+    // Step 2: country-code shortcut (set by geo-detect on a previous visit)
     const country = localStorage.getItem("rc_country");
-    if (country !== null) return;
+    if (country === "BD") { setLangState("bn"); return; }
+    if (country !== null) return; // other country → keep "en"
+    // Step 3: geo-detect (first visit, no stored data)
     import("@/lib/geoLocale").then(({ detectGeoLocale }) =>
-      detectGeoLocale().then(({ lang: detected }) => setLang(detected))
+      detectGeoLocale().then(({ lang: detected }) => {
+        setLangState(detected as Lang);
+        localStorage.setItem("lang", detected);
+      })
     );
   }, []);
 
   const handleSetLang = (newLang: Lang) => {
-    setLang(newLang);
-    if (typeof localStorage !== "undefined") localStorage.setItem("lang", newLang);
+    setLangState(newLang);
+    localStorage.setItem("lang", newLang);
   };
 
   return (
@@ -659,3 +661,4 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export const useLanguage = () => useContext(LanguageContext);
+

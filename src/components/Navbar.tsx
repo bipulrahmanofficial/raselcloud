@@ -17,8 +17,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 
-const LANG_CYCLE  = { en: "bn", bn: "hi", hi: "en"  } as const;
-const LANG_LABEL  = { en: "EN",  bn: "বাং", hi: "हिं" } as const;
+const LANG_CYCLE  = { en: "bn", bn: "en" } as const;
+const LANG_LABEL  = { en: "বাং", bn: "EN" } as const;
 
 const PREFETCH_MAP: Record<string, string[][]> = {
   "/services": [["/api/services"]],
@@ -156,7 +156,7 @@ const Navbar = () => {
                 }`}
               >
                 <Icon size={13} className="shrink-0" />
-                {link.label}
+                <span suppressHydrationWarning>{link.label}</span>
               </Link>
             );
           })}
@@ -172,7 +172,7 @@ const Navbar = () => {
               data-testid="button-more-menu"
             >
               <Info size={13} className="shrink-0" />
-              {t.navMore ?? "More"}
+              <span suppressHydrationWarning>{t.navMore ?? "More"}</span>
               <ChevronDown size={12} className={`transition-transform ${moreMenuOpen ? "rotate-180" : ""}`} />
             </button>
 
@@ -381,7 +381,7 @@ const Navbar = () => {
 
                 {/* Main links */}
                 <div className="px-3 mb-4">
-                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground/50 px-2 mb-1.5">
+                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground/50 px-2 mb-1.5" suppressHydrationWarning>
                     {t.navSectionMain ?? "Main"}
                   </p>
                   <div className="space-y-0.5">
@@ -404,7 +404,7 @@ const Navbar = () => {
                           }`}>
                             <Icon size={15} />
                           </span>
-                          {link.label}
+                          <span suppressHydrationWarning>{link.label}</span>
                           {active && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-primary" />}
                         </Link>
                       );
@@ -414,7 +414,7 @@ const Navbar = () => {
 
                 {/* Info / More links */}
                 <div className="px-3 mb-3">
-                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground/50 px-2 mb-1.5">
+                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground/50 px-2 mb-1.5" suppressHydrationWarning>
                     {t.navSectionInfo ?? "More"}
                   </p>
                   <div className="space-y-0.5">
@@ -454,7 +454,7 @@ const Navbar = () => {
                     Preferences
                   </p>
                   <button
-                    onClick={() => setLang(LANG_CYCLE[lang])}
+                    onClick={() => setLang(LANG_CYCLE[lang as "en" | "bn"] as "en" | "bn")}
                     className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-muted/60 transition-all text-sm"
                     aria-label="Switch language"
                   >
@@ -462,7 +462,7 @@ const Navbar = () => {
                       <Globe size={14} />
                       Language
                     </span>
-                    <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full">{LANG_LABEL[lang]}</span>
+                    <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full" suppressHydrationWarning>{LANG_LABEL[lang as "en" | "bn"] ?? "EN"}</span>
                   </button>
                   <button
                     onClick={toggleCurrency}
