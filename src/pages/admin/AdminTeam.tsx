@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Plus, Edit2, Trash2, X, Github, Linkedin, Twitter } from "lucide-react";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { BilingualField } from "@/components/admin/BilingualField";
+import { ImageUploadField } from "@/components/admin/ImageUploadField";
 import { apiFetch } from "@/lib/api";
 import { toast } from "sonner";
 
@@ -72,10 +73,13 @@ function Modal({ member, onClose, onSave, isSaving }: {
             type="textarea" rows={2}
             placeholder="Short bio..." placeholderBn="সংক্ষিপ্ত পরিচিতি..." />
 
-          <div className="pt-3 border-t border-white/5">
-            <label className="block text-xs font-medium text-white/60 mb-1.5">Photo URL (optional)</label>
-            <input value={form.avatarUrl ?? ""} onChange={(e) => set("avatarUrl", e.target.value)} className="input-admin w-full" placeholder="https://..." />
-          </div>
+          <ImageUploadField
+            label="Profile Photo"
+            description="Upload an image or paste a URL. Either works."
+            value={form.avatarUrl ?? ""}
+            onChange={(url) => set("avatarUrl", url)}
+            placeholder="https://example.com/photo.jpg"
+          />
 
           <div className="grid grid-cols-3 gap-3 pt-3">
             {[

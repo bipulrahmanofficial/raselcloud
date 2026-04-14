@@ -30,6 +30,7 @@ import { Badge } from "@/components/ui/badge";
 import { Plus, Pencil, Trash2, Eye, EyeOff } from "lucide-react";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { BilingualField } from "@/components/admin/BilingualField";
+import { ImageUploadField } from "@/components/admin/ImageUploadField";
 
 interface BlogPost {
   id: string;
@@ -316,27 +317,22 @@ export default function AdminBlog() {
                 className="font-mono text-sm"
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <Label htmlFor="post-cover">Cover Image URL</Label>
-                <Input
-                  id="post-cover"
-                  data-testid="input-post-cover"
-                  value={form.coverImage}
-                  onChange={(e) => setForm((f) => ({ ...f, coverImage: e.target.value }))}
-                  placeholder="https://..."
-                />
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="post-tags">Tags (comma-separated)</Label>
-                <Input
-                  id="post-tags"
-                  data-testid="input-post-tags"
-                  value={form.tags}
-                  onChange={(e) => setForm((f) => ({ ...f, tags: e.target.value }))}
-                  placeholder="SEO, Web Design, Marketing"
-                />
-              </div>
+            <ImageUploadField
+              label="Cover Image"
+              description="Upload or paste URL. Displayed at the top of the blog post."
+              value={form.coverImage}
+              onChange={(url) => setForm((f) => ({ ...f, coverImage: url }))}
+              placeholder="https://..."
+            />
+            <div className="space-y-1.5">
+              <Label htmlFor="post-tags">Tags (comma-separated)</Label>
+              <Input
+                id="post-tags"
+                data-testid="input-post-tags"
+                value={form.tags}
+                onChange={(e) => setForm((f) => ({ ...f, tags: e.target.value }))}
+                placeholder="SEO, Web Design, Marketing"
+              />
             </div>
             <div className="flex items-center gap-3">
               <Switch

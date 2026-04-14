@@ -2,9 +2,10 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { Plus, Edit2, Trash2, X, ExternalLink, Image as ImageIcon } from "lucide-react";
+import { Plus, Edit2, Trash2, X, ExternalLink } from "lucide-react";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { BilingualField } from "@/components/admin/BilingualField";
+import { ImageUploadField } from "@/components/admin/ImageUploadField";
 import { apiFetch } from "@/lib/api";
 import { toast } from "sonner";
 
@@ -98,31 +99,25 @@ function Modal({ item, onClose, onSave, isSaving }: {
             placeholder={"Feature 1\nFeature 2\nFeature 3"}
             placeholderBn={"বৈশিষ্ট্য ১\nবৈশিষ্ট্য ২\nবৈশিষ্ট্য ৩"} />
 
-          {/* Non-bilingual: image, url, tags */}
-          <div className="grid grid-cols-2 gap-4 pt-3 border-t border-white/5 mt-1">
-            <div>
-              <label className="block text-xs font-medium text-white/60 mb-1.5">Image URL *</label>
-              <input value={ia(form.image)} onChange={(e) => set("image", e.target.value)} className="input-admin w-full" placeholder="https://images.unsplash.com/..." />
-            </div>
-            <div>
+          <ImageUploadField
+            label="Project Screenshot / Image *"
+            description="Upload or paste a URL. Shown on portfolio cards & detail modal."
+            value={ia(form.image)}
+            onChange={(url) => set("image", url)}
+            placeholder="https://images.unsplash.com/..."
+          />
+
+          <div className="grid grid-cols-2 gap-4 pt-1">
+            <div className="py-2">
               <label className="block text-xs font-medium text-white/60 mb-1.5">Live URL (optional)</label>
               <input value={ia(form.liveUrl)} onChange={(e) => set("liveUrl", e.target.value)} className="input-admin w-full" placeholder="https://yourproject.com" />
             </div>
-          </div>
-
-          <div className="pt-3">
-            <label className="block text-xs font-medium text-white/60 mb-1.5">Tech Tags (comma separated)</label>
-            <input value={ia(form.tags as unknown as string)} onChange={(e) => set("tags", e.target.value)} className="input-admin w-full" placeholder="React, Node.js, MySQL, Stripe" />
-          </div>
-
-          {form.image && (
-            <div className="rounded-xl overflow-hidden border border-white/10 h-36 relative mt-3">
-              <img src={form.image as string} alt="Preview" className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-3">
-                <span className="text-xs text-white/70 flex items-center gap-1"><ImageIcon size={11} /> Image Preview</span>
-              </div>
+            <div className="py-2">
+              <label className="block text-xs font-medium text-white/60 mb-1.5">Tech Tags (comma separated)</label>
+              <input value={ia(form.tags as unknown as string)} onChange={(e) => set("tags", e.target.value)} className="input-admin w-full" placeholder="React, Node.js, Stripe" />
             </div>
-          )}
+          </div>
+
 
           <div className="flex gap-3 pt-4">
             <button

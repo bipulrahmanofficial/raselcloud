@@ -26,8 +26,12 @@ async function refreshToken(): Promise<string | null> {
 
 export async function apiFetch(path: string, options: RequestInit = {}): Promise<Response> {
   const token = getToken();
+
+  // Don't set Content-Type for FormData — browser auto-sets multipart boundary
+  const isFormData = options.body instanceof FormData;
+
   const headers: Record<string, string> = {
-    "Content-Type": "application/json",
+    ...(isFormData ? {} : { "Content-Type": "application/json" }),
     ...(options.headers as Record<string, string> | undefined),
   };
   if (token) {

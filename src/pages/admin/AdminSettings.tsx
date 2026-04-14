@@ -5,6 +5,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Save, Globe, Palette, Phone, Share2, BarChart3, Code, Megaphone, RefreshCw, Zap, Link2 } from "lucide-react";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { BilingualField } from "@/components/admin/BilingualField";
+import { ImageUploadField } from "@/components/admin/ImageUploadField";
 import { apiFetch } from "@/lib/api";
 import { toast } from "sonner";
 
@@ -156,8 +157,21 @@ const AdminSettings = () => {
           <BilingualField label="Tagline" nameEn="tagline" nameBn="tagline_bn"
             valueEn={String(settings.tagline ?? "")} valueBn={String(settings.tagline_bn ?? "")}
             onChange={(n, v) => set(n, v)} placeholder="Digital Agency & Web Solutions" placeholderBn="ডিজিটাল এজেন্সি ও ওয়েব সমাধান" />
-          <Field label="Logo URL" description="URL to your logo image (PNG/SVG recommended)" name="logoUrl" value={settings.logoUrl ?? ""} onChange={set} placeholder="https://..." />
-          <Field label="Favicon URL" description="URL to your favicon (.ico or .png)" name="faviconUrl" value={settings.faviconUrl ?? ""} onChange={set} placeholder="https://..." />
+          <ImageUploadField
+            label="Site Logo"
+            description="PNG or SVG recommended. Shown in navbar and emails."
+            value={String(settings.logoUrl ?? "")}
+            onChange={(url) => set("logoUrl", url)}
+            placeholder="https://..."
+          />
+          <ImageUploadField
+            label="Favicon"
+            description="ICO, PNG or SVG. Shown in browser tabs."
+            value={String(settings.faviconUrl ?? "")}
+            onChange={(url) => set("faviconUrl", url)}
+            placeholder="https://..."
+            accept="image/*,.ico"
+          />
           <BilingualField label="Footer Text" nameEn="footerText" nameBn="footerText_bn"
             valueEn={String(settings.footerText ?? "")} valueBn={String(settings.footerText_bn ?? "")}
             onChange={(n, v) => set(n, v)} placeholder="© 2025 rasel.cloud. All rights reserved." placeholderBn="© ২০২৫ রাসেল ক্লাউড। সর্বস্বত্ব সংরক্ষিত।" />

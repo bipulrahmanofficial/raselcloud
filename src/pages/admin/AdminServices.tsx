@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Plus, Edit2, Trash2, ToggleLeft, ToggleRight, Package, X, ChevronDown, ChevronUp } from "lucide-react";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { BilingualField } from "@/components/admin/BilingualField";
+import { ImageUploadField } from "@/components/admin/ImageUploadField";
 import { apiFetch } from "@/lib/api";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
@@ -390,7 +391,6 @@ const AdminServices = () => {
               {[
                 { label: "Slug (e.g. web-development)", key: "slug", type: "text", required: true },
                 { label: "Category", key: "category", type: "text", required: true },
-                { label: "Image URL (optional)", key: "imageUrl", type: "url", required: false },
                 { label: "Tags (comma separated)", key: "tags", type: "text", required: false },
               ].map((f) => (
                 <div key={f.key}>
@@ -405,6 +405,13 @@ const AdminServices = () => {
                   />
                 </div>
               ))}
+              <ImageUploadField
+                label="Service Image (optional)"
+                description="Upload or paste URL. Shown on service card."
+                value={serviceForm.imageUrl}
+                onChange={(url) => setServiceForm({ ...serviceForm, imageUrl: url })}
+                placeholder="https://..."
+              />
               <div className="flex items-center gap-2">
                 <input
                   type="checkbox"
