@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useLangValue } from "@/hooks/useLangValue";
 import { useQuery } from "@tanstack/react-query";
+import { MountedText } from "@/components/MountedText";
 
 const Footer = () => {
   const { t } = useLanguage();
@@ -41,8 +42,8 @@ const Footer = () => {
                 { label: t.navPortfolio, to: "/portfolio" },
               ].map((l) => (
                 <li key={l.to}>
-                  <Link href={l.to} className="text-xs text-muted-foreground hover:text-foreground transition-colors" suppressHydrationWarning>
-                    {l.label}
+                  <Link href={l.to} className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+                    <MountedText>{l.label}</MountedText>
                   </Link>
                 </li>
               ))}
@@ -60,7 +61,7 @@ const Footer = () => {
               ].map((l) => (
                 <li key={l.to}>
                   <Link href={l.to} className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-                    {l.label}
+                    <MountedText>{l.label}</MountedText>
                   </Link>
                 </li>
               ))}
@@ -77,7 +78,7 @@ const Footer = () => {
               ].map((l) => (
                 <li key={l.to}>
                   <Link href={l.to} className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-                    {l.label}
+                    <MountedText>{l.label}</MountedText>
                   </Link>
                 </li>
               ))}
@@ -92,8 +93,12 @@ const Footer = () => {
             {" "}· All rights reserved.
           </p>
           <div className="flex gap-4 text-xs text-muted-foreground">
-            <Link href="/privacy" className="hover:text-foreground transition-colors">{t.navPrivacy ?? "Privacy"}</Link>
-            <Link href="/terms" className="hover:text-foreground transition-colors">{t.navTerms ?? "Terms"}</Link>
+            <Link href="/privacy" className="hover:text-foreground transition-colors">
+              <MountedText>{t.navPrivacy ?? "Privacy"}</MountedText>
+            </Link>
+            <Link href="/terms" className="hover:text-foreground transition-colors">
+              <MountedText>{t.navTerms ?? "Terms"}</MountedText>
+            </Link>
           </div>
         </div>
       </div>

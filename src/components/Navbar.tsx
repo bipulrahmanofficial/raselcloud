@@ -16,6 +16,7 @@ import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { MountedText } from "@/components/MountedText";
 
 const LANG_CYCLE  = { en: "bn", bn: "en" } as const;
 const LANG_LABEL  = { en: "বাং", bn: "EN" } as const;
@@ -149,6 +150,7 @@ const Navbar = () => {
                 href={link.href}
                 prefetch={true}
                 onMouseEnter={() => handleLinkHover(link.href)}
+                suppressHydrationWarning
                 className={`flex items-center gap-1.5 text-sm transition-colors duration-300 ${
                   pathname === link.href
                     ? "text-primary font-medium"
@@ -156,7 +158,7 @@ const Navbar = () => {
                 }`}
               >
                 <Icon size={13} className="shrink-0" />
-                <span suppressHydrationWarning>{link.label}</span>
+                <MountedText>{link.label}</MountedText>
               </Link>
             );
           })}
@@ -172,7 +174,7 @@ const Navbar = () => {
               data-testid="button-more-menu"
             >
               <Info size={13} className="shrink-0" />
-              <span suppressHydrationWarning>{t.navMore ?? "More"}</span>
+              <MountedText>{t.navMore ?? "More"}</MountedText>
               <ChevronDown size={12} className={`transition-transform ${moreMenuOpen ? "rotate-180" : ""}`} />
             </button>
 
@@ -195,7 +197,7 @@ const Navbar = () => {
                       }`}
                     >
                       <Icon size={14} className="text-muted-foreground" />
-                      {link.label}
+                      <MountedText>{link.label}</MountedText>
                     </Link>
                   );
                 })}
@@ -381,8 +383,8 @@ const Navbar = () => {
 
                 {/* Main links */}
                 <div className="px-3 mb-4">
-                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground/50 px-2 mb-1.5" suppressHydrationWarning>
-                    {t.navSectionMain ?? "Main"}
+                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground/50 px-2 mb-1.5">
+                    <MountedText>{t.navSectionMain ?? "Main"}</MountedText>
                   </p>
                   <div className="space-y-0.5">
                     {navLinks.map((link) => {
@@ -404,7 +406,7 @@ const Navbar = () => {
                           }`}>
                             <Icon size={15} />
                           </span>
-                          <span suppressHydrationWarning>{link.label}</span>
+                          <MountedText>{link.label}</MountedText>
                           {active && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-primary" />}
                         </Link>
                       );
@@ -414,8 +416,8 @@ const Navbar = () => {
 
                 {/* Info / More links */}
                 <div className="px-3 mb-3">
-                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground/50 px-2 mb-1.5" suppressHydrationWarning>
-                    {t.navSectionInfo ?? "More"}
+                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground/50 px-2 mb-1.5">
+                    <MountedText>{t.navSectionInfo ?? "More"}</MountedText>
                   </p>
                   <div className="space-y-0.5">
                     {[
@@ -441,7 +443,7 @@ const Navbar = () => {
                           }`}>
                             <Icon size={13} />
                           </span>
-                          {link.label}
+                          <MountedText>{link.label}</MountedText>
                         </Link>
                       );
                     })}
@@ -462,7 +464,9 @@ const Navbar = () => {
                       <Globe size={14} />
                       Language
                     </span>
-                    <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full" suppressHydrationWarning>{LANG_LABEL[lang as "en" | "bn"] ?? "EN"}</span>
+                    <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full" suppressHydrationWarning>
+                      <MountedText>{LANG_LABEL[lang as "en" | "bn"] ?? "EN"}</MountedText>
+                    </span>
                   </button>
                   <button
                     onClick={toggleCurrency}
