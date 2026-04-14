@@ -73,15 +73,30 @@ export function BilingualField({
         ? renderInput(nameEn, valueEn, placeholder ?? `English ${label.toLowerCase()}...`, false)
         : renderInput(nameBn, valueBn, placeholderBn ?? `বাংলা ${label.toLowerCase()}...`, true)}
 
-      {/* Show both not empty indicator */}
+      {/* Status hints */}
       {valueEn && valueBn && (
-        <p className="text-[10px] text-green-400/60 mt-1">✓ Both languages filled</p>
+        <div className="flex items-center gap-3 mt-1">
+          <p className="text-[10px] text-green-400/70">
+            ✓ <span className="text-white/50">EN users see</span> English
+            &nbsp;·&nbsp;
+            <span className="text-white/50">BN users see</span> বাংলা
+          </p>
+        </div>
       )}
       {valueEn && !valueBn && (
-        <p className="text-[10px] text-yellow-400/50 mt-1">Only English — Bengali users will see English</p>
+        <p className="text-[10px] text-yellow-400/50 mt-1">
+          Only English — EN users see English · BN users see English (no Bangla added)
+        </p>
       )}
       {!valueEn && valueBn && (
-        <p className="text-[10px] text-yellow-400/50 mt-1">Only Bengali filled — English will show Bengali</p>
+        <p className="text-[10px] text-blue-400/50 mt-1">
+          Only Bangla — BN users see বাংলা · EN users see Bangla (no English added)
+        </p>
+      )}
+      {!valueEn && !valueBn && (
+        <p className="text-[10px] text-white/20 mt-1">
+          Empty — add English, Bangla, or both
+        </p>
       )}
     </div>
   );
