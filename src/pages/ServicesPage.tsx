@@ -82,10 +82,10 @@ const ServicesPage = () => {
                   </div>
 
                   <h3 className="text-xl font-bold mb-3 text-foreground" data-testid={`text-service-title-${svc.id}`}>
-                    {lv(svc.title, (svc as Record<string,string>).title_bn)}
+                    {lv(svc.title, (svc as unknown as Record<string,string>).title_bn)}
                   </h3>
                   <p className="text-muted-foreground text-sm leading-relaxed mb-4 line-clamp-3">
-                    {lv(svc.description, (svc as Record<string,string>).description_bn)}
+                    {lv(svc.description, (svc as unknown as Record<string,string>).description_bn)}
                   </p>
 
                   {(svc.startingPrice || (svc.packages && svc.packages.length > 0)) && (

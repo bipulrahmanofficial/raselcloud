@@ -75,7 +75,7 @@ const PricingPage = () => {
 
                     <div className="grid md:grid-cols-3 gap-6">
                       {svc.sortedPackages.map((pkg) => {
-                        const pkgAny = pkg as Record<string, unknown>;
+                        const pkgAny = pkg as unknown as Record<string, unknown>;
                         const pkgName = lv(pkg.name, pkgAny.name_bn as string);
                         const pkgFeaturesBn = (pkgAny.features_bn as string[]) ?? [];
                         const featuresToShow =

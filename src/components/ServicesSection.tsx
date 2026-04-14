@@ -46,10 +46,10 @@ const ServicesSection = () => {
                   {categoryIcons[service.category] || "🔧"}
                 </div>
                 <h3 className="text-lg font-semibold mb-3 text-foreground">
-                  {lv(service.title, (service as Record<string, string>).title_bn)}
+                  {lv(service.title, (service as unknown as Record<string, string>).title_bn)}
                 </h3>
                 <p className="text-muted-foreground leading-relaxed text-sm mb-4 line-clamp-3">
-                  {lv(service.description, (service as Record<string, string>).description_bn)}
+                  {lv(service.description, (service as unknown as Record<string, string>).description_bn)}
                 </p>
                 <Link
                   href={`/services/${service.slug}`}

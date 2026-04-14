@@ -19,7 +19,7 @@ const PackageCard = ({ pkg, service, index = 0 }: PackageCardProps) => {
   const { lang } = useLanguage();
   const inCart = items.some((i) => i.id === pkg.id);
 
-  const pkgAny = pkg as Record<string, unknown>;
+  const pkgAny = pkg as unknown as Record<string, unknown>;
 
   // Bilingual name
   const displayName = lv(pkg.name, pkgAny.name_bn as string);
@@ -36,7 +36,7 @@ const PackageCard = ({ pkg, service, index = 0 }: PackageCardProps) => {
     addItem({
       id:          pkg.id,
       serviceId:   service.id,
-      serviceName: lv(service.title, (service as Record<string, unknown>).title_bn as string),
+      serviceName: lv(service.title, (service as unknown as Record<string, unknown>).title_bn as string),
       packageId:   pkg.id,
       packageName: displayName,
       price:       parseFloat(pkg.price),

@@ -113,10 +113,10 @@ const ServiceDetailPage = () => {
             </div>
 
             <h1 className="section-heading text-3xl md:text-4xl mb-4" data-testid="text-service-title">
-              {lv(service.title, (service as Record<string,string>).title_bn)}
+              {lv(service.title, (service as unknown as Record<string,string>).title_bn)}
             </h1>
             <p className="text-muted-foreground leading-relaxed max-w-2xl" data-testid="text-service-description">
-              {lv(service.description, (service as Record<string,string>).description_bn)}
+              {lv(service.description, (service as unknown as Record<string,string>).description_bn)}
             </p>
           </div>
 
