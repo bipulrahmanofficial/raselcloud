@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Plus, Edit2, Trash2, ToggleLeft, ToggleRight, Package, X, ChevronDown, ChevronUp } from "lucide-react";
 import AdminLayout from "@/components/admin/AdminLayout";
+import { BilingualField } from "@/components/admin/BilingualField";
 import { apiFetch } from "@/lib/api";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
@@ -22,10 +23,10 @@ interface ServicePackage {
 
 interface Service {
   id: string;
-  title: string;
+  title: string; title_bn?: string;
   slug: string;
   category: string;
-  description: string;
+  description: string; description_bn?: string;
   imageUrl: string | null;
   tags: string[];
   isActive: boolean;
@@ -35,10 +36,10 @@ interface Service {
 const TIERS = ["basic", "standard", "premium"] as const;
 
 const emptyServiceForm = {
-  title: "",
+  title: "",    title_bn: "",
   slug: "",
   category: "",
-  description: "",
+  description: "", description_bn: "",
   imageUrl: "",
   tags: "",
   isActive: true,
@@ -177,10 +178,10 @@ const AdminServices = () => {
 
   const openEditService = (svc: Service) => {
     setServiceForm({
-      title: svc.title,
+      title: svc.title,           title_bn: svc.title_bn ?? "",
       slug: svc.slug,
       category: svc.category,
-      description: svc.description,
+      description: svc.description, description_bn: svc.description_bn ?? "",
       imageUrl: svc.imageUrl ?? "",
       tags: svc.tags.join(", "),
       isActive: svc.isActive,
@@ -358,9 +359,29 @@ const AdminServices = () => {
                 <X size={18} />
               </button>
             </div>
-            <form onSubmit={handleServiceSubmit} className="px-6 py-5 space-y-4 max-h-[70vh] overflow-y-auto">
+            <form onSubmit={handleServiceSubmit} className="px-6 py-5 space-y-4 max-h-[75vh] overflow-y-auto">
+              {/* Bilingual Title */}
+              <div className="rounded-xl bg-white/[0.03] border border-white/8 p-3">
+                <BilingualField
+                  label="Title" required
+                  nameEn="title" nameBn="title_bn"
+                  valueEn={serviceForm.title} valueBn={serviceForm.title_bn}
+                  onChange={(k, v) => setServiceForm({ ...serviceForm, [k]: v })}
+                  placeholder="Web Development" placeholderBn="ওয়েব ডেভেলপমেন্ট"
+                />
+              </div>
+              {/* Bilingual Description */}
+              <div className="rounded-xl bg-white/[0.03] border border-white/8 p-3">
+                <BilingualField
+                  label="Description" required
+                  nameEn="description" nameBn="description_bn"
+                  valueEn={serviceForm.description} valueBn={serviceForm.description_bn}
+                  onChange={(k, v) => setServiceForm({ ...serviceForm, [k]: v })}
+                  type="textarea" rows={3}
+                  placeholder="Describe this service..." placeholderBn="এই সেবাটি বর্ণনা করুন..."
+                />
+              </div>
               {[
-                { label: "Title", key: "title", type: "text", required: true },
                 { label: "Slug (e.g. web-development)", key: "slug", type: "text", required: true },
                 { label: "Category", key: "category", type: "text", required: true },
                 { label: "Image URL (optional)", key: "imageUrl", type: "url", required: false },
@@ -378,17 +399,6 @@ const AdminServices = () => {
                   />
                 </div>
               ))}
-              <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Description</label>
-                <textarea
-                  rows={3}
-                  required
-                  value={serviceForm.description}
-                  onChange={(e) => setServiceForm({ ...serviceForm, description: e.target.value })}
-                  className="w-full bg-muted/40 border border-border/60 rounded-lg px-3 py-2 text-sm text-foreground resize-none focus:outline-none focus:border-primary/50 transition-colors"
-                  data-testid="input-service-description"
-                />
-              </div>
               <div className="flex items-center gap-2">
                 <input
                   type="checkbox"

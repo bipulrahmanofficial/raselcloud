@@ -2,9 +2,26 @@
 
 import Link from "next/link";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useLangValue } from "@/hooks/useLangValue";
+import { useQuery } from "@tanstack/react-query";
 
 const Footer = () => {
   const { t } = useLanguage();
+  const lv = useLangValue();
+
+  const { data: settings } = useQuery<Record<string, string>>({
+    queryKey: ["/api/admin/settings"],
+    queryFn: async () => {
+      const r = await fetch("/api/admin/settings");
+      if (!r.ok) return {};
+      return r.json();
+    },
+    staleTime: 120_000,
+  });
+
+  const footerText = settings?.footerText
+    ? lv(settings.footerText, settings.footerText_bn)
+    : t.footerText;
 
   return (
     <footer className="border-t border-border/30 py-10">
@@ -12,7 +29,7 @@ const Footer = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
           <div>
             <p className="text-sm font-semibold text-foreground mb-3 gradient-text">rasel.cloud</p>
-            <p className="text-xs text-muted-foreground leading-relaxed">{t.footerText}</p>
+            <p className="text-xs text-muted-foreground leading-relaxed" suppressHydrationWarning>{footerText}</p>
           </div>
 
           <div>
@@ -24,7 +41,7 @@ const Footer = () => {
                 { label: t.navPortfolio, to: "/portfolio" },
               ].map((l) => (
                 <li key={l.to}>
-                  <Link href={l.to} className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+                  <Link href={l.to} className="text-xs text-muted-foreground hover:text-foreground transition-colors" suppressHydrationWarning>
                     {l.label}
                   </Link>
                 </li>

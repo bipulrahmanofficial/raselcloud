@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useLangValue } from "@/hooks/useLangValue";
 import { useServices } from "@/hooks/useServices";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -13,6 +14,7 @@ const categoryIcons: Record<string, string> = {
 
 const ServicesSection = () => {
   const { t } = useLanguage();
+  const lv = useLangValue();
   const { data: services, isLoading } = useServices();
 
   return (
@@ -43,8 +45,12 @@ const ServicesSection = () => {
                 <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-2xl transition-all duration-500 group-hover:shadow-[0_0_30px_hsl(var(--primary)/0.3)] group-hover:scale-110">
                   {categoryIcons[service.category] || "🔧"}
                 </div>
-                <h3 className="text-lg font-semibold mb-3 text-foreground">{service.title}</h3>
-                <p className="text-muted-foreground leading-relaxed text-sm mb-4 line-clamp-3">{service.description}</p>
+                <h3 className="text-lg font-semibold mb-3 text-foreground">
+                  {lv(service.title, (service as Record<string, string>).title_bn)}
+                </h3>
+                <p className="text-muted-foreground leading-relaxed text-sm mb-4 line-clamp-3">
+                  {lv(service.description, (service as Record<string, string>).description_bn)}
+                </p>
                 <Link
                   href={`/services/${service.slug}`}
                   className="inline-flex items-center gap-1 text-primary text-sm font-medium hover:gap-2 transition-all"

@@ -6,6 +6,7 @@ import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useLangValue } from "@/hooks/useLangValue";
 import { useServices } from "@/hooks/useServices";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -19,6 +20,7 @@ const categoryIcons: Record<string, string> = {
 
 const ServicesPage = () => {
   const { t } = useLanguage();
+  const lv = useLangValue();
   const { data: services, isLoading } = useServices();
   const { formatPrice } = useCurrency();
 
@@ -79,8 +81,12 @@ const ServicesPage = () => {
                     </span>
                   </div>
 
-                  <h3 className="text-xl font-bold mb-3 text-foreground" data-testid={`text-service-title-${svc.id}`}>{svc.title}</h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed mb-4 line-clamp-3">{svc.description}</p>
+                  <h3 className="text-xl font-bold mb-3 text-foreground" data-testid={`text-service-title-${svc.id}`}>
+                    {lv(svc.title, (svc as Record<string,string>).title_bn)}
+                  </h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed mb-4 line-clamp-3">
+                    {lv(svc.description, (svc as Record<string,string>).description_bn)}
+                  </p>
 
                   {(svc.startingPrice || (svc.packages && svc.packages.length > 0)) && (
                     <div className="flex items-center gap-2 mb-5">
