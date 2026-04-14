@@ -4,11 +4,18 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   allowedDevOrigins: [
+    // Replit
     "*.replit.dev",
     "*.kirk.replit.dev",
     "*.sisko.replit.dev",
     "*.repl.co",
     process.env.REPLIT_DEV_DOMAIN,
+    // Local network — allow any device on the same LAN
+    "192.168.0.186",
+    "192.168.0.*",
+    "192.168.1.*",
+    "10.0.0.*",
+    "10.0.1.*",
   ].filter(Boolean),
   experimental: {
     optimizePackageImports: [
