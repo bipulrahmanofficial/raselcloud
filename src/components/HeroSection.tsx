@@ -370,7 +370,7 @@ const HeroSection = () => {
 
             {/* Headline */}
             <h1
-              className="text-[2.6rem] sm:text-5xl lg:text-6xl xl:text-[4.5rem] font-black leading-[1.08] mb-5 animate-fade-in-up text-gray-900 dark:text-white"
+              className="text-[1.85rem] sm:text-4xl lg:text-5xl xl:text-[4.5rem] font-black leading-[1.1] mb-5 animate-fade-in-up text-gray-900 dark:text-white"
               style={{ fontFamily: "var(--font-playfair), Georgia, serif", animationDelay: "100ms" }}
             >
               {t.heroHeading1}
@@ -432,7 +432,7 @@ const HeroSection = () => {
                 {settings?.heroCtaText ? lv(settings.heroCtaText, settings.heroCtaText_bn) : t.heroCtaPrimary}
               </Link>
               <Link
-                href="/services"
+                href="/portfolio"
                 data-testid="link-hero-cta-secondary"
                 className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full text-[15px] font-semibold transition-all duration-300
                   text-gray-800 border border-gray-300 hover:bg-gray-100

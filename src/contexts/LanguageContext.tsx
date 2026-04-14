@@ -9,7 +9,7 @@ const translations = {
     navHome: "Home",
     navServices: "Services",
     navPricing: "Pricing",
-    navPortfolio: "Portfolio",
+    navPortfolio: "Our Demo",
     navTeam: "Team",
     navWhyUs: "Why Us",
     navContact: "Contact",
@@ -37,7 +37,7 @@ const translations = {
     heroName: "rasel.cloud",
     heroSub2: " — a multi-service digital agency delivering custom web solutions, AI automation, SEO growth, and creative media for businesses of every scale.",
     heroCtaPrimary: "Get a Free Consultation",
-    heroCtaSecondary: "Explore Services",
+    heroCtaSecondary: "Our Demo",
     heroProjects: "Projects",
     heroClients: "Clients",
     heroYears: "Years",
@@ -75,9 +75,9 @@ const translations = {
     proc4Title: "Launch & Scale",
     proc4Desc: "Rigorous testing, deployment, ongoing support, and growth strategy.",
 
-    portfolioTag: "Selected Work",
-    portfolioHeading: "Portfolio",
-    portfolioHeadingHighlight: "Showcase",
+    portfolioTag: "Live Demos",
+    portfolioHeading: "Our",
+    portfolioHeadingHighlight: "Demo",
     port1Title: "BD Order Solution",
     port1Cat: "E-commerce Platform",
     port1Desc: "All-in-one WooCommerce checkout manager with bKash/Nagad payment integration.",
@@ -132,7 +132,7 @@ const translations = {
     ctaHeading2: "Your Business?",
     ctaDesc: "Whether you need a custom web app, AI automation, or stunning content — rasel.cloud is your digital partner.",
     ctaCta1: "Get a Free Consultation",
-    ctaCta2: "Explore Our Work",
+    ctaCta2: "See Our Work",
 
     contactTag: "Get in Touch",
     contactSubheading: "Tell us about your project — we'll respond within 24 hours.",
@@ -239,10 +239,10 @@ const translations = {
   },
   bn: {
     navHome: "হোম",
-    navServices: "সেবাসমূহ",
-    navPricing: "মূল্য",
-    navPortfolio: "পোর্টফোলিও",
-    navTeam: "টিম",
+    navServices: "সেবা",
+    navPricing: "মূল্যতালিকা",
+    navPortfolio: "আমাদের ডেমো",
+    navTeam: "আমাদের টিম",
     navWhyUs: "কেন আমরা",
     navContact: "যোগাযোগ",
     navAbout: "আমাদের সম্পর্কে",
@@ -268,8 +268,8 @@ const translations = {
     heroSub1: "স্বাগতম",
     heroName: "rasel.cloud",
     heroSub2: "-এ — কাস্টম ওয়েব, AI অটোমেশন, SEO এবং ক্রিয়েটিভ মিডিয়া প্রদানকারী ডিজিটাল এজেন্সি।",
-    heroCtaPrimary: "ফ্রি পরামর্শ নিন",
-    heroCtaSecondary: "সেবাসমূহ দেখুন",
+    heroCtaPrimary: "যোগাযোগ করুন",
+    heroCtaSecondary: "আমাদের ডেমো",
     heroProjects: "প্রজেক্ট",
     heroClients: "ক্লায়েন্ট",
     heroYears: "বছর",
@@ -307,9 +307,9 @@ const translations = {
     proc4Title: "লঞ্চ ও স্কেল",
     proc4Desc: "টেস্টিং, ডিপ্লয়মেন্ট ও গ্রোথ স্ট্র্যাটেজি।",
 
-    portfolioTag: "নির্বাচিত কাজ",
-    portfolioHeading: "পোর্টফোলিও",
-    portfolioHeadingHighlight: "শোকেস",
+    portfolioTag: "লাইভ ডেমো",
+    portfolioHeading: "আমাদের",
+    portfolioHeadingHighlight: "ডেমোসমূহ",
     port1Title: "BD Order Solution",
     port1Cat: "ই-কমার্স প্ল্যাটফর্ম",
     port1Desc: "বিকাশ/নগদ পেমেন্ট ইন্টিগ্রেশন সহ WooCommerce চেকআউট ম্যানেজার।",
@@ -698,9 +698,10 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
         setLangState(stored as Lang);
         return;
       }
-      // Step 2: country-code shortcut (set by geo-detect on a previous visit)
+      // Step 2: country-code shortcut — default to 'bn' for Bangladesh
       const country = localStorage.getItem("rc_country");
-      if (country === "BD") { setLangState("bn"); return; }
+      // No stored preference → default to Bengali (BD-first platform)
+      if (country === "BD" || country === null) { setLangState("bn"); localStorage.setItem("lang", "bn"); return; }
       if (country !== null) return; // other country → keep "en"
       // Step 3: geo-detect (first visit, no stored data)
       import("@/lib/geoLocale").then(({ detectGeoLocale }) =>

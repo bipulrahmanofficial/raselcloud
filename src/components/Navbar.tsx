@@ -68,13 +68,13 @@ const Navbar = () => {
   }, [queryClient]);
 
   const navLinks = [
-    { label: t.navHome, href: "/", icon: Home },
-    { label: t.navServices, href: "/services", icon: Layers },
-    { label: t.navPricing, href: "/pricing", icon: DollarSign },
-    { label: t.navPortfolio, href: "/portfolio", icon: Briefcase },
-    { label: t.navTeam, href: "/team", icon: Users },
-    { label: t.navWhyUs, href: "/why-us", icon: HelpCircle },
-    { label: t.navContact, href: "/contact", icon: Mail },
+    { label: t.navHome,      href: "/",          icon: Home },
+    { label: t.navPortfolio, href: "/portfolio",  icon: Briefcase },
+    { label: t.navServices,  href: "/services",  icon: Layers },
+    { label: t.navPricing,   href: "/pricing",   icon: DollarSign },
+    { label: t.navTeam,      href: "/team",      icon: Users },
+    { label: t.navWhyUs,     href: "/why-us",    icon: HelpCircle },
+    { label: t.navContact,   href: "/contact",   icon: Mail },
   ];
 
   const infoLinks = [
@@ -202,16 +202,22 @@ const Navbar = () => {
                 })}
               </div>
             )}
-
-            {moreMenuOpen && (
-              <div className="fixed inset-0 z-40" onClick={() => setMoreMenuOpen(false)} />
-            )}
-          </div>
-        </div>
-
-        {/* ─── Right: Desktop controls ────────────────────────────────────── */}
+        {/* ─── Right: Desktop controls ─────────────────────────────────── */}
         <div className="hidden lg:flex items-center gap-2">
-          {mounted && <LanguageSwitcher />}
+          {/* Language toggle pill — prominent in top bar */}
+          <button
+            onClick={() => setLang(LANG_CYCLE[lang as "en" | "bn"] as "en" | "bn")}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-bold transition-all duration-300 ${
+              lang === "bn"
+                ? "bg-primary/10 border-primary/40 text-primary"
+                : "bg-secondary/10 border-secondary/40 text-secondary"
+            } hover:opacity-80`}
+            aria-label="Switch language"
+            suppressHydrationWarning
+          >
+            <Globe size={13} />
+            <span suppressHydrationWarning>{lang === "bn" ? "বাং → EN" : "EN → বাং"}</span>
+          </button>
           <CurrencyPill />
           <Link
             href="/cart"
@@ -229,7 +235,6 @@ const Navbar = () => {
 
           {user ? (
             <div className="relative flex items-center gap-2">
-              <ThemeBtn />
               <button
                 onClick={() => setUserMenuOpen((v) => !v)}
                 className="flex items-center gap-2 px-3 py-2 rounded-lg bg-muted/50 border border-border/50 hover:border-primary/40 transition-all text-sm text-foreground"
@@ -289,7 +294,12 @@ const Navbar = () => {
               )}
             </div>
           ) : (
-            <ThemeBtn />
+            <Link href="/login"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary/10 border border-primary/30 text-primary text-xs font-medium hover:bg-primary/20 transition-all"
+            >
+              <LogIn size={13} />
+              <span suppressHydrationWarning>{t.navSignIn ?? "Sign In"}</span>
+            </Link>
           )}
         </div>
 
@@ -308,8 +318,20 @@ const Navbar = () => {
             )}
           </Link>
 
-          {/* Dark/Light toggle — replaces the old login icon */}
-          <ThemeBtn data-testid="button-mobile-theme-toggle" />
+          {/* Language toggle pill — mobile top bar (theme moved to sidebar) */}
+          <button
+            onClick={() => setLang(LANG_CYCLE[lang as "en" | "bn"] as "en" | "bn")}
+            className={`flex items-center gap-1 px-2.5 py-1.5 rounded-full border text-[11px] font-bold transition-all ${
+              lang === "bn"
+                ? "bg-primary/10 border-primary/40 text-primary"
+                : "bg-secondary/10 border-secondary/40 text-secondary"
+            }`}
+            suppressHydrationWarning
+            aria-label="Switch language"
+          >
+            <Globe size={11} />
+            <span suppressHydrationWarning>{lang === "bn" ? "EN" : "বাং"}</span>
+          </button>
 
           {/* Mobile sidebar sheet (no trigger, controlled by hamburger at top-left) */}
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -451,8 +473,8 @@ const Navbar = () => {
 
                 {/* Language & Currency rows */}
                 <div className="px-3">
-                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground/50 px-2 mb-1.5">
-                    Preferences
+                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground/50 px-2 mb-1.5" suppressHydrationWarning>
+                    {lang === "bn" ? "পছন্দ" : "Preferences"}
                   </p>
                   <button
                     onClick={() => setLang(LANG_CYCLE[lang as "en" | "bn"] as "en" | "bn")}
@@ -461,7 +483,7 @@ const Navbar = () => {
                   >
                     <span className="flex items-center gap-2 text-muted-foreground">
                       <Globe size={14} />
-                      Language
+                      <span suppressHydrationWarning>{lang === "bn" ? "ভাষা" : "Language"}</span>
                     </span>
                     <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full" suppressHydrationWarning>
                       {LANG_LABEL[lang as "en" | "bn"] ?? "EN"}
@@ -475,13 +497,28 @@ const Navbar = () => {
                   >
                     <span className="flex items-center gap-2 text-muted-foreground">
                       <DollarSign size={14} />
-                      Currency
+                      <span suppressHydrationWarning>{lang === "bn" ? "মুদ্রা" : "Currency"}</span>
                     </span>
                     <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
                       currency === "USD"
                         ? "bg-secondary/10 text-secondary"
                         : "bg-primary/10 text-primary"
                     }`}>{currency === "BDT" ? "৳ BDT" : "$ USD"}</span>
+                  </button>
+                  {/* Theme toggle — now in sidebar only */}
+                  <button
+                    onClick={mounted ? toggleTheme : undefined}
+                    className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-muted/60 transition-all text-sm"
+                    suppressHydrationWarning
+                    data-testid="button-sidebar-theme"
+                  >
+                    <span className="flex items-center gap-2 text-muted-foreground">
+                      {mounted ? (isDark ? <Sun size={14} /> : <Moon size={14} />) : <Sun size={14} />}
+                      <span suppressHydrationWarning>{lang === "bn" ? "থিম" : "Theme"}</span>
+                    </span>
+                    <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-muted text-muted-foreground" suppressHydrationWarning>
+                      {mounted ? (isDark ? (lang === "bn" ? "ডার্ক" : "Dark") : (lang === "bn" ? "লাইট" : "Light")) : "Dark"}
+                    </span>
                   </button>
                 </div>
               </div>

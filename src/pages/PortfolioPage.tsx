@@ -220,7 +220,7 @@ function ProjectModal({
               </a>
               <button onClick={onClose}
                 className="flex-1 px-4 py-2 rounded-xl border border-border/60 text-sm text-muted-foreground hover:text-foreground hover:border-primary/40 transition-all" suppressHydrationWarning>
-                ← {lv("Back to Portfolio", "পোর্টফোলিওতে ফিরুন")}
+                ← {lv("Back to Demo", "ডেমো তালিকায় ফিরুন")}
               </button>
             </div>
           </div>
