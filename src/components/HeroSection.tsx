@@ -167,7 +167,14 @@ function ReviewsPopup({ onClose }: { onClose: () => void }) {
   );
 }
 
-function StatsPopup({ anchor, onClose }: { anchor: "bottom-left" | "top-right"; onClose: () => void }) {
+function StatsPopup({
+  anchor, onClose, t, lv,
+}: {
+  anchor: "bottom-left" | "top-right";
+  onClose: () => void;
+  t: Record<string, string>;
+  lv: (en?: string | null, bn?: string | null) => string;
+}) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -186,39 +193,48 @@ function StatsPopup({ anchor, onClose }: { anchor: "bottom-left" | "top-right"; 
   return (
     <div
       ref={ref}
-      className={`absolute ${posClass} z-50 w-64 rounded-2xl shadow-2xl border border-white/10
+      className={`absolute ${posClass} z-50 w-72 rounded-2xl shadow-2xl border border-white/10
         bg-white dark:bg-[#111] backdrop-blur-xl overflow-hidden animate-fade-in-up`}
-      style={{ animationDuration: "200ms" }}
+      style={{ animationDuration: "180ms" }}
     >
-      <div className="px-4 pt-4 pb-3 border-b border-gray-100 dark:border-white/8 flex items-center justify-between">
-        <span className="text-[11px] uppercase tracking-widest font-semibold text-gray-400 dark:text-white/40">
-          rasel.cloud — আমাদের অর্জন
-        </span>
+      {/* Header */}
+      <div className="px-4 pt-3 pb-2.5 border-b border-gray-100 dark:border-white/8 flex items-center justify-between bg-gradient-to-r from-emerald-50/60 to-transparent dark:from-emerald-900/10">
+        <div className="flex items-center gap-2">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+          </span>
+          <span className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-400" suppressHydrationWarning>
+            {lv("Available for new projects", "নতুন প্রজেক্টের জন্য প্রস্তুত")}
+          </span>
+        </div>
         <button
           onClick={onClose}
-          className="text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors"
+          className="text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors rounded-lg p-0.5 hover:bg-gray-100 dark:hover:bg-white/10"
           aria-label="Close"
         >
           <X size={13} />
         </button>
       </div>
 
+      {/* Stats grid */}
       <div className="grid grid-cols-2 gap-px bg-gray-100 dark:bg-white/5">
         {STATS.map((s) => (
           <div key={s.labelKey} className="flex flex-col items-center justify-center py-4 px-3 bg-white dark:bg-[#111]">
             <span className="text-2xl font-black" style={{ color: s.color }}>{s.value}</span>
             <span className="text-[11px] text-gray-500 dark:text-white/45 mt-1 text-center leading-tight" suppressHydrationWarning>
-              {String(t[s.labelKey as keyof typeof t] ?? s.labelKey)}
+              {String(t[s.labelKey] ?? s.labelKey)}
             </span>
           </div>
         ))}
       </div>
 
-      <div className="px-4 py-3">
+      {/* Socials */}
+      <div className="px-4 py-3 border-t border-gray-100 dark:border-white/8">
         <p className="text-[10px] uppercase tracking-widest text-gray-400 dark:text-white/35 mb-2 text-center" suppressHydrationWarning>
-          {t.contactTag}
+          {lv("Connect with us", "যোগাযোগ করুন")}
         </p>
-        <div className="flex gap-2">
+        <div className="flex gap-2 mb-3">
           {SOCIALS.map((s) => (
             <a
               key={s.label}
@@ -227,7 +243,6 @@ function StatsPopup({ anchor, onClose }: { anchor: "bottom-left" | "top-right"; 
               rel="noopener noreferrer"
               aria-label={s.label}
               className="flex-1 flex items-center justify-center h-9 rounded-xl border border-gray-100 dark:border-white/8 text-gray-500 dark:text-white/50 transition-all duration-200 hover:scale-105"
-              style={{ "--hover-color": s.color } as React.CSSProperties}
               onMouseEnter={(e) => {
                 (e.currentTarget as HTMLElement).style.color = s.color;
                 (e.currentTarget as HTMLElement).style.borderColor = s.color + "40";
@@ -243,6 +258,12 @@ function StatsPopup({ anchor, onClose }: { anchor: "bottom-left" | "top-right"; 
             </a>
           ))}
         </div>
+        <a
+          href="/contact"
+          className="flex items-center justify-center gap-1.5 w-full py-2 rounded-xl bg-primary/10 hover:bg-primary/20 border border-primary/20 hover:border-primary/40 text-primary text-[11px] font-semibold transition-all duration-200" suppressHydrationWarning
+        >
+          {lv("→ Start a Project", "→ প্রজেক্ট শুরু করুন")}
+        </a>
       </div>
     </div>
   );
@@ -502,10 +523,10 @@ const HeroSection = () => {
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60" />
                     <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500 dark:bg-emerald-400" />
                   </span>
-                  <span className="text-xs font-medium text-gray-700 dark:text-white/80">Available for new projects</span>
+                  <span className="text-xs font-medium text-gray-700 dark:text-white/80" suppressHydrationWarning>{lv("Available for new projects", "নতুন প্রজেক্টের জন্য প্রস্তুত")}</span>
                 </button>
                 {availabilityOpen && (
-                  <StatsPopup anchor="bottom-left" onClose={() => setAvailabilityOpen(false)} />
+                  <StatsPopup anchor="bottom-left" onClose={() => setAvailabilityOpen(false)} t={t as unknown as Record<string,string>} lv={lv} />
                 )}
               </div>
 
@@ -520,7 +541,7 @@ const HeroSection = () => {
                   style={{ backdropFilter: "blur(14px)" }}
                 >
                   <span className="text-xl font-black text-[#FF4B4B]">5★</span>
-                  <span className="text-[10px] text-gray-500 dark:text-white/50 mt-0.5">Client Rating</span>
+                  <span className="text-[10px] text-gray-500 dark:text-white/50 mt-0.5" suppressHydrationWarning>{lv("Client Rating", "ক্লায়েন্ট রেটিং")}</span>
                 </button>
                 {ratingOpen && (
                   <ReviewsPopup onClose={() => setRatingOpen(false)} />
