@@ -132,8 +132,8 @@ const ContactSection = () => {
           <h2 className="section-heading">
             {t.contactHeading} <span className="gradient-text">{t.contactHeadingHighlight}</span>
           </h2>
-          <p className="text-muted-foreground mt-3 max-w-lg mx-auto">
-            Fill out the form and we'll respond within 24 hours — or reach us instantly via WhatsApp or Telegram.
+          <p className="text-muted-foreground mt-3 max-w-lg mx-auto" suppressHydrationWarning>
+            {t.contactSkipDesc}
           </p>
         </div>
 
@@ -147,7 +147,7 @@ const ContactSection = () => {
           >
             <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
               <MessageSquare size={18} className="text-primary" />
-              Send a Message
+              <span suppressHydrationWarning>{t.contactSendTitle}</span>
             </h3>
 
             <div className="grid sm:grid-cols-2 gap-5">
@@ -182,7 +182,7 @@ const ContactSection = () => {
             <div className="grid sm:grid-cols-2 gap-5">
               <div>
                 <label className="block text-sm font-medium text-muted-foreground mb-1.5">
-                  <span className="flex items-center gap-1.5"><Phone size={13} /> Phone (optional)</span>
+                  <span className="flex items-center gap-1.5" suppressHydrationWarning><Phone size={13} /> {t.contactPhoneLabel}</span>
                 </label>
                 <PhoneInput
                   dialCode={formData.dialCode}
@@ -196,14 +196,14 @@ const ContactSection = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-muted-foreground mb-1.5">Service interested in</label>
+                <label className="block text-sm font-medium text-muted-foreground mb-1.5" suppressHydrationWarning>{t.contactServiceLabel}</label>
                 <select
                   value={formData.service}
                   onChange={(e) => setFormData({ ...formData, service: e.target.value })}
                   data-testid="select-contact-service"
                   className="w-full bg-muted/50 border border-border/50 rounded-lg px-4 py-3 text-foreground focus:outline-none focus:border-primary/50 transition-colors text-sm appearance-none"
                 >
-                  <option value="">— Select a service —</option>
+                  <option value="" suppressHydrationWarning>{t.contactSelectService}</option>
                   {SERVICES.map((s) => (
                     <option key={s} value={s}>{s}</option>
                   ))}
@@ -242,7 +242,7 @@ const ContactSection = () => {
               data-testid="button-contact-submit"
               className="btn-primary-glow w-full inline-flex items-center justify-center gap-2 disabled:opacity-50"
             >
-              {status === "loading" ? "Sending..." : t.contactSend}
+              <span suppressHydrationWarning>{status === "loading" ? t.contactFormSending : t.contactSend}</span>
               <Send size={17} />
             </button>
           </form>
@@ -253,8 +253,8 @@ const ContactSection = () => {
             style={{ animationDelay: "0.2s", animationFillMode: "both" }}
           >
             <div className="glass-card p-6 md:p-8">
-              <h3 className="text-lg font-semibold text-foreground mb-1">Contact Directly</h3>
-              <p className="text-sm text-muted-foreground mb-6">Skip the form — reach us on your favourite platform.</p>
+              <h3 className="text-lg font-semibold text-foreground mb-1" suppressHydrationWarning>{t.contactDirectTitle}</h3>
+              <p className="text-sm text-muted-foreground mb-6" suppressHydrationWarning>{t.contactSkipDesc}</p>
 
               <div className="space-y-3">
                 {DIRECT_CHANNELS.map((ch) => (
@@ -283,7 +283,7 @@ const ContactSection = () => {
             <div className="glass-card p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Clock size={16} className="text-primary" />
-                <h4 className="font-semibold text-foreground text-sm">Office Hours</h4>
+                <h4 className="font-semibold text-foreground text-sm" suppressHydrationWarning>{t.contactOfficeHours}</h4>
               </div>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
