@@ -7,7 +7,7 @@ import StatsSection from "@/components/StatsSection";
 import { useInView } from "@/hooks/useInView";
 import { useQueryClient } from "@tanstack/react-query";
 
-const ServicesSection = lazy(() => import("@/components/ServicesSection"));
+const DemoSection     = lazy(() => import("@/components/DemoSection"));
 const ProcessSection = lazy(() => import("@/components/ProcessSection"));
 const TestimonialsSection = lazy(() => import("@/components/TestimonialsSection"));
 const TechStackSection = lazy(() => import("@/components/TechStackSection"));
@@ -17,14 +17,14 @@ const CTASection = lazy(() => import("@/components/CTASection"));
 const ContactSection = lazy(() => import("@/components/ContactSection"));
 const Footer = lazy(() => import("@/components/Footer"));
 
-const ServicesSkeleton = () => (
+const DemoSkeleton = () => (
   <section className="py-12 md:py-16">
     <div className="container mx-auto px-4 md:px-6">
       <div className="h-6 w-32 bg-muted/40 rounded mx-auto mb-4 animate-pulse" />
       <div className="h-10 w-64 bg-muted/40 rounded mx-auto mb-8 animate-pulse" />
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid md:grid-cols-2 gap-6">
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="h-56 rounded-2xl bg-muted/30 animate-pulse" />
+          <div key={i} className="h-72 rounded-2xl bg-muted/30 animate-pulse" />
         ))}
       </div>
     </div>
@@ -197,8 +197,8 @@ const Index = () => {
 
       <StatsSection />
 
-      <DeferredSection fallback={<ServicesSkeleton />}>
-        <ServicesSection />
+      <DeferredSection fallback={<DemoSkeleton />}>
+        <DemoSection />
       </DeferredSection>
 
       <DeferredSection fallback={<ProcessSkeleton />}>
