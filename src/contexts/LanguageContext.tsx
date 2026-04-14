@@ -135,6 +135,7 @@ const translations = {
     ctaCta2: "Explore Our Work",
 
     contactTag: "Get in Touch",
+    contactSubheading: "Tell us about your project — we'll respond within 24 hours.",
     contactHeading: "Let's Build",
     contactHeadingHighlight: "Together",
     contactName: "Name",
@@ -366,6 +367,7 @@ const translations = {
     ctaCta2: "আমাদের কাজ দেখুন",
 
     contactTag: "যোগাযোগ করুন",
+    contactSubheading: "আপনার প্রজেক্ট সম্পর্কে জানান — আমরা ২৪ ঘণ্টার মধ্যে সাড়া দেবো।",
     contactHeading: "একসাথে",
     contactHeadingHighlight: "তৈরি করি",
     contactName: "নাম",

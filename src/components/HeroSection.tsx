@@ -25,10 +25,10 @@ const DOTS = [
 ];
 
 const STATS = [
-  { value: "50+", label: "প্রজেক্ট সম্পন্ন",   color: "#FF4B4B" },
-  { value: "30+", label: "সন্তুষ্ট ক্লায়েন্ট", color: "#14B8A6" },
-  { value: "99%", label: "ক্লায়েন্ট সন্তুষ্টি", color: "#FF8C00" },
-  { value: "24/7", label: "সাপোর্ট উপলব্ধ",   color: "#0EA5E9" },
+  { value: "50+", labelKey: "statsProjects",    color: "#FF4B4B" },
+  { value: "30+", labelKey: "statsClients",     color: "#14B8A6" },
+  { value: "99%", labelKey: "statsSatisfaction", color: "#FF8C00" },
+  { value: "24/7", labelKey: "statsSupport",    color: "#0EA5E9" },
 ];
 
 const REVIEWS = [
@@ -71,7 +71,7 @@ const HeroCountUp = ({ end, suffix, label }: { end: number; suffix: string; labe
   return (
     <div ref={ref} className="text-center">
       <div className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">{count}{suffix}</div>
-      <div className="text-[11px] text-gray-500 dark:text-white/40 mt-1 uppercase tracking-wider">{label}</div>
+      <div className="text-[11px] text-gray-500 dark:text-white/40 mt-1 uppercase tracking-wider" suppressHydrationWarning>{label}</div>
     </div>
   );
 };
@@ -205,16 +205,18 @@ function StatsPopup({ anchor, onClose }: { anchor: "bottom-left" | "top-right"; 
 
       <div className="grid grid-cols-2 gap-px bg-gray-100 dark:bg-white/5">
         {STATS.map((s) => (
-          <div key={s.label} className="flex flex-col items-center justify-center py-4 px-3 bg-white dark:bg-[#111]">
+          <div key={s.labelKey} className="flex flex-col items-center justify-center py-4 px-3 bg-white dark:bg-[#111]">
             <span className="text-2xl font-black" style={{ color: s.color }}>{s.value}</span>
-            <span className="text-[11px] text-gray-500 dark:text-white/45 mt-1 text-center leading-tight">{s.label}</span>
+            <span className="text-[11px] text-gray-500 dark:text-white/45 mt-1 text-center leading-tight" suppressHydrationWarning>
+              {t[s.labelKey as keyof typeof t] as string}
+            </span>
           </div>
         ))}
       </div>
 
       <div className="px-4 py-3">
-        <p className="text-[10px] uppercase tracking-widest text-gray-400 dark:text-white/35 mb-2 text-center">
-          যোগাযোগ করুন
+        <p className="text-[10px] uppercase tracking-widest text-gray-400 dark:text-white/35 mb-2 text-center" suppressHydrationWarning>
+          {t.contactTag}
         </p>
         <div className="flex gap-2">
           {SOCIALS.map((s) => (

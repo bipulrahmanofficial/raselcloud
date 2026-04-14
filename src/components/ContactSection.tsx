@@ -133,7 +133,7 @@ const ContactSection = () => {
             {t.contactHeading} <span className="gradient-text">{t.contactHeadingHighlight}</span>
           </h2>
           <p className="text-muted-foreground mt-3 max-w-lg mx-auto" suppressHydrationWarning>
-            {t.contactSkipDesc}
+            {t.contactSubheading}
           </p>
         </div>
 

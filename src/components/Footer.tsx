@@ -86,10 +86,10 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-border/20 pt-6 flex flex-col md:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-muted-foreground">
-            © 2026{" "}
+          <p className="text-xs text-muted-foreground" suppressHydrationWarning>
+            &copy; {new Date().getFullYear()}{" "}
             <Link href="/" className="gradient-text font-medium hover:opacity-80 transition-opacity">rasel.cloud</Link>
-            {" "}· All rights reserved.
+            {" "}&middot; {lv("All rights reserved.", "\u09b8\u09b0\u09cd\u09ac\u09b8\u09cd\u09ac \u09b8\u0982\u09b0\u0995\u09cd\u09b7\u09bf\u09a4\u0964")}
           </p>
           <div className="flex gap-4 text-xs text-muted-foreground">
             <Link href="/privacy" suppressHydrationWarning className="hover:text-foreground transition-colors">

@@ -123,7 +123,7 @@ function ProjectModal({
 
           {featuresDisplay.length > 0 && (
             <div className="mb-6">
-              <h3 className="text-sm font-semibold text-foreground mb-3 uppercase tracking-wider">Key Features</h3>
+              <h3 className="text-sm font-semibold text-foreground mb-3 uppercase tracking-wider" suppressHydrationWarning>{lv("Key Features", "\u09ae\u09c2\u09b2 \u09ac\u09c8\u09b6\u09bf\u09b7\u09cd\u099f\u09cd\u09af")}</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {featuresDisplay.map((f, i) => (
                   <div key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -138,7 +138,7 @@ function ProjectModal({
           {project.tags.length > 0 && (
             <div className="mb-8">
               <h3 className="text-sm font-semibold text-foreground mb-3 uppercase tracking-wider flex items-center gap-1.5">
-                <Tag size={13} className="text-muted-foreground" /> Tech Stack
+                <Tag size={13} className="text-muted-foreground" /> <span suppressHydrationWarning>{lv("Tech Stack", "\u09aa\u09cd\u09b0\u09af\u09c1\u0995\u09cd\u09a4\u09bf\u09b8\u09ae\u09c2\u09b9")}</span>
               </h3>
               <div className="flex flex-wrap gap-2">
                 {project.tags.map((tag) => (
@@ -238,8 +238,8 @@ const PortfolioPage = () => {
               {t.portfolioHeading ?? "Portfolio"}{" "}
               <span className="gradient-text">{t.portfolioHeadingHighlight ?? "Showcase"}</span>
             </h1>
-            <p className="text-muted-foreground max-w-xl mx-auto text-sm md:text-base">
-              Real projects. Real results. Click any project to see the full case study.
+            <p className="text-muted-foreground max-w-xl mx-auto text-sm md:text-base" suppressHydrationWarning>
+              {lv("Real projects. Real results. Click any card to see the full case study.", "\u09ac\u09be\u09b8\u09cd\u09a4\u09ac \u09aa\u09cd\u09b0\u099c\u09c7\u0995\u09cd\u099f\u2c \u09ac\u09be\u09b8\u09cd\u09a4\u09ac \u09ab\u09b2\u09be\u09ab\u09b2\u0964 \u09af\u09c7\u0995\u09cb\u09a8\u09cb \u0995\u09be\u09b0\u09cd\u09a1\u09c7 \u0995\u09cd\u09b2\u09bf\u0995 \u0995\u09b0\u09c1\u09a8\u0964")}
             </p>
           </div>
 
@@ -310,8 +310,8 @@ const PortfolioPage = () => {
 
                       {/* Hover CTA */}
                       <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                        <div className="flex items-center gap-2 bg-background/90 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold text-foreground shadow-lg translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                          View Case Study <ArrowRight size={14} />
+                        <div className="flex items-center gap-2 bg-background/90 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold text-foreground shadow-lg translate-y-2 group-hover:translate-y-0 transition-transform duration-300" suppressHydrationWarning>
+                          {lv("View Case Study", "\u09ac\u09bf\u09b8\u09cd\u09a4\u09be\u09b0\u09bf\u09a4 \u09a6\u09c7\u0996\u09c1\u09a8")} <ArrowRight size={14} />
                         </div>
                       </div>
                     </div>
@@ -345,8 +345,8 @@ const PortfolioPage = () => {
           )}
 
           {!isLoading && !isError && filtered.length === 0 && (
-            <div className="text-center py-12 text-muted-foreground text-sm">
-              No projects in this category yet. Check back soon!
+            <div className="text-center py-12 text-muted-foreground text-sm" suppressHydrationWarning>
+              {lv("No projects in this category yet. Check back soon!", "\u098f\u0987 \u09ac\u09bf\u09ad\u09be\u0997\u09c7 \u098f\u0996\u09a8\u09cb \u0995\u09cb\u09a8\u09cb \u09aa\u09cd\u09b0\u099c\u09c7\u0995\u09cd\u099f \u09a8\u09c5\u0987\u0964 \u09b6\u09c0\u0998\u09cd\u09b0\u0987 \u0986\u09b8\u09ac\u09c7!")}
             </div>
           )}
         </div>
