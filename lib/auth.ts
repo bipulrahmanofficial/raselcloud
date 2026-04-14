@@ -27,6 +27,10 @@ export async function getAuthUser(req: NextRequest) {
   if (!token) return null;
   try {
     const payload = verifyToken(token);
+    // ── Local admin bypass — no Firebase call needed ──
+    if (payload.id === "local-admin-001") {
+      return { id: payload.id, name: "Admin", email: payload.email, role: "admin", phone: null, avatarUrl: null };
+    }
     const user = await findUserById(payload.id);
     if (!user) return null;
     return {

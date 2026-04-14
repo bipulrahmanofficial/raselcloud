@@ -11,6 +11,11 @@ const loginSchema = z.object({
 
 const COOKIE_MAX_AGE = 7 * 24 * 60 * 60;
 
+// Local admin credentials for dev without Firebase
+// Set LOCAL_ADMIN_EMAIL + LOCAL_ADMIN_PASSWORD in .env.local to override
+const LOCAL_ADMIN_EMAIL = process.env.LOCAL_ADMIN_EMAIL ?? "admin@rasel.cloud";
+const LOCAL_ADMIN_PASSWORD = process.env.LOCAL_ADMIN_PASSWORD ?? "admin123";
+
 export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => null);
   const result = loginSchema.safeParse(body);
@@ -18,6 +23,24 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Validation failed", issues: result.error.issues }, { status: 400 });
   }
   const { email, password } = result.data;
+
+  // ── Local admin bypass (works without Firebase) ──
+  if (email === LOCAL_ADMIN_EMAIL && password === LOCAL_ADMIN_PASSWORD) {
+    const fakeAdminId = "local-admin-001";
+    const token = signToken({ id: fakeAdminId, email, role: "admin" });
+    const res = NextResponse.json({
+      token,
+      user: { id: fakeAdminId, name: "Admin", email, role: "admin" },
+    });
+    res.cookies.set("rc_auth_token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: COOKIE_MAX_AGE,
+      path: "/",
+    });
+    return res;
+  }
 
   try {
     const user = await findUserByEmail(email);
@@ -48,3 +71,4 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
+
