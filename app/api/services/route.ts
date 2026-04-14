@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
         packages: allPkgs.filter((p) => p.serviceId === svc.id),
       }));
       return NextResponse.json(result, {
-        headers: { "Cache-Control": "public, max-age=30, s-maxage=60, stale-while-revalidate=300" },
+        headers: { "Cache-Control": "private, max-age=30, must-revalidate" },
       });
     }
 
@@ -42,7 +42,7 @@ export async function GET(req: NextRequest) {
     }));
 
     return NextResponse.json(result, {
-      headers: { "Cache-Control": "public, max-age=30, s-maxage=60, stale-while-revalidate=300" },
+      headers: { "Cache-Control": "private, max-age=30, must-revalidate" },
     });
   } catch (err) {
     console.error("Services API error:", err);

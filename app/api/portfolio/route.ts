@@ -24,7 +24,7 @@ export async function GET() {
   try {
     const items = readPortfolio();
     return NextResponse.json(items, {
-      headers: { "Cache-Control": "s-maxage=60, stale-while-revalidate=300" },
+      headers: { "Cache-Control": "private, max-age=30, must-revalidate" },
     });
   } catch {
     return NextResponse.json([], { status: 200 });

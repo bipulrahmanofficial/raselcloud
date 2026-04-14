@@ -16,7 +16,7 @@ export async function GET(_req: NextRequest, { params }: { params: { slug: strin
 
     const packages = readLocalPackages(svc.id);
     return NextResponse.json({ ...svc, packages }, {
-      headers: { "Cache-Control": "public, max-age=30, s-maxage=60, stale-while-revalidate=300" },
+      headers: { "Cache-Control": "private, max-age=30, must-revalidate" },
     });
   } catch (err) {
     console.error("Service detail error:", err);
