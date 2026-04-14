@@ -96,9 +96,18 @@ function ProjectModal({
               <p className="text-muted-foreground text-sm mt-1" suppressHydrationWarning>{tagline}</p>
             </div>
             {project.liveUrl && (
-              <a href={project.liveUrl} target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border/50 text-xs text-muted-foreground hover:text-foreground hover:border-primary/40 transition-all shrink-0">
-                <ExternalLink size={12} /> Live Site
+              <a
+                href={project.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group/live flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 hover:bg-emerald-500/25 hover:border-emerald-400/70 hover:text-emerald-300 transition-all duration-300 shrink-0 shadow-[0_0_12px_rgba(16,185,129,0.15)] hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] text-xs font-semibold"
+              >
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                </span>
+                <span suppressHydrationWarning>{lv("Live Site", "\u09b2\u09be\u0987\u09ad \u09b8\u09be\u0987\u099f")}</span>
+                <ExternalLink size={12} className="transition-transform group-hover/live:translate-x-0.5 group-hover/live:-translate-y-0.5" />
               </a>
             )}
           </div>
