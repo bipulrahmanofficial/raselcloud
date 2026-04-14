@@ -2,7 +2,7 @@
   {
     "id": "1",
     "category": "E-Commerce",
-    "title": "BazaarBD — Multi-vendor E-Commerce",
+    "title": "BazaarBDa — Multi-vendor E-Commerce",
     "tagline": "Bangladesh's growing online marketplace",
     "description": "Full WooCommerce platform with bKash, Nagad & card payments. Real-time inventory, seller dashboard, and mobile-first checkout.",
     "image": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=900&q=80",
@@ -47,7 +47,9 @@
       "Progress certificates",
       "Quiz & assessment engine"
     ],
-    "year": "2024"
+    "year": "2024",
+    "features_bn": [],
+    "title_bn": "aaa"
   },
   {
     "id": "3",
@@ -144,5 +146,18 @@
       "Core Web Vitals fixed"
     ],
     "year": "2023"
+  },
+  {
+    "id": "1776143779502",
+    "category": "Web",
+    "title": "aa",
+    "tagline": "bb",
+    "description": "sd",
+    "image": "ugdfgfd.co",
+    "tags": [],
+    "metric": "",
+    "features": [],
+    "year": "2026",
+    "liveUrl": ""
   }
 ]
