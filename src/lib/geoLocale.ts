@@ -8,13 +8,16 @@ let _promise: Promise<GeoLocale> | null = null;
 
 async function fetchCountry(): Promise<string> {
   const controller = new AbortController();
-  const id = setTimeout(() => controller.abort(), 3500);
+  const id = setTimeout(() => controller.abort(), 4000);
   try {
-    const res = await fetch("https://ipapi.co/json/", { signal: controller.signal });
+    // Use our local proxy to avoid CORS — server fetches ipapi.co and returns country_code
+    const res = await fetch("/api/geo", { signal: controller.signal });
     const data = await res.json();
     const code = (data.country_code as string) || "UNKNOWN";
     try { localStorage.setItem(COUNTRY_KEY, code); } catch {}
     return code;
+  } catch {
+    return "UNKNOWN";
   } finally {
     clearTimeout(id);
   }

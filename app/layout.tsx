@@ -63,7 +63,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <link rel="preload" as="image" href="/hero-main.jpg" fetchPriority="high" />
       </head>
-      <body className={inter.className}>
+      <body className={inter.className} suppressHydrationWarning>
         <NextTopLoader color="#f97316" height={3} showSpinner={false} easing="ease" speed={200} />
         <Providers>{children}</Providers>
       </body>
