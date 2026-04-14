@@ -170,9 +170,9 @@ const DemoSection = () => {
   }, [selected, closeModal]);
 
   const { data: allItems = [] } = useQuery<PortfolioItem[]>({
-    queryKey: ["/api/portfolio-demos"],
+    queryKey: ["/api/portfolio"],
     queryFn: async () => {
-      const r = await fetch("/api/admin/portfolio");
+      const r = await fetch("/api/portfolio");
       if (!r.ok) return [];
       return r.json();
     },
