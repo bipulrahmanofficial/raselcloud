@@ -95,21 +95,6 @@ function ProjectModal({
               <h2 className="text-2xl md:text-3xl font-bold text-foreground leading-tight" suppressHydrationWarning>{title}</h2>
               <p className="text-muted-foreground text-sm mt-1" suppressHydrationWarning>{tagline}</p>
             </div>
-            {project.liveUrl && (
-              <a
-                href={project.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group/live flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 hover:bg-emerald-500/25 hover:border-emerald-400/70 hover:text-emerald-300 transition-all duration-300 shrink-0 shadow-[0_0_12px_rgba(16,185,129,0.15)] hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] text-xs font-semibold"
-              >
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-                </span>
-                <span suppressHydrationWarning>{lv("Live Site", "\u09b2\u09be\u0987\u09ad \u09b8\u09be\u0987\u099f")}</span>
-                <ExternalLink size={12} className="transition-transform group-hover/live:translate-x-0.5 group-hover/live:-translate-y-0.5" />
-              </a>
-            )}
           </div>
 
           <p className="text-foreground/80 leading-relaxed mb-6 text-sm md:text-base" suppressHydrationWarning>{description}</p>
@@ -143,14 +128,31 @@ function ProjectModal({
             </div>
           )}
 
-          <div className="flex flex-col sm:flex-row gap-3">
-            <a href="/contact" className="btn-primary-glow flex-1 inline-flex items-center justify-center gap-2 text-sm" suppressHydrationWarning>
-              {lv("Build Something Similar", "একই ধরনের কিছু তৈরি করুন")} <ArrowRight size={14} />
-            </a>
-            <button onClick={onClose}
-              className="flex-1 px-4 py-2 rounded-xl border border-border/60 text-sm text-muted-foreground hover:text-foreground hover:border-primary/40 transition-all" suppressHydrationWarning>
-              ← {lv("Back", "ফিরে যান")}
-            </button>
+          <div className="flex flex-col gap-3">
+            {project.liveUrl && (
+              <a
+                href={project.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group/live w-full inline-flex items-center justify-center gap-3 py-3.5 rounded-xl bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 hover:bg-emerald-500/35 hover:border-emerald-400 hover:text-white transition-all duration-300 shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] text-sm font-bold tracking-wide"
+              >
+                <span className="relative flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500" />
+                </span>
+                <span suppressHydrationWarning>{lv("🚀 Visit Live Site", "🚀 লাইভ সাইট দেখুন")}</span>
+                <ExternalLink size={16} className="transition-transform group-hover/live:translate-x-1 group-hover/live:-translate-y-1" />
+              </a>
+            )}
+            <div className="flex flex-col sm:flex-row gap-3">
+              <a href="/contact" className="btn-primary-glow flex-1 inline-flex items-center justify-center gap-2 text-sm" suppressHydrationWarning>
+                {lv("Build Something Similar", "একই ধরনের কিছু তৈরি করুন")} <ArrowRight size={14} />
+              </a>
+              <button onClick={onClose}
+                className="flex-1 px-4 py-2 rounded-xl border border-border/60 text-sm text-muted-foreground hover:text-foreground hover:border-primary/40 transition-all" suppressHydrationWarning>
+                ← {lv("Back", "ফিরে যান")}
+              </button>
+            </div>
           </div>
         </div>
       </div>
