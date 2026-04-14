@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
-type Lang = "en" | "bn" | "hi";
+type Lang = "en" | "bn";
 
 const translations = {
   en: {
@@ -626,7 +626,7 @@ const LanguageContext = createContext<LanguageContextType>({
 function getInitialLang(): Lang {
   if (typeof localStorage === "undefined") return "en";
   const stored = localStorage.getItem("lang");
-  if (stored === "bn" || stored === "hi" || stored === "en") return stored as Lang;
+  if (stored === "bn" || stored === "en") return stored as Lang;
   const country = localStorage.getItem("rc_country");
   if (country === "BD") return "bn";
   return "en";
@@ -638,7 +638,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (typeof localStorage === "undefined") return;
     const stored = localStorage.getItem("lang");
-    if (stored === "bn" || stored === "hi" || stored === "en") return;
+    if (stored === "bn" || stored === "en") return;
     const country = localStorage.getItem("rc_country");
     if (country !== null) return;
     import("@/lib/geoLocale").then(({ detectGeoLocale }) =>
