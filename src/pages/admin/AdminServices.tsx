@@ -47,9 +47,11 @@ const emptyServiceForm = {
 
 const emptyPackageForm = {
   name: "",
+  name_bn: "",
   tier: "basic" as string,
   price: "",
   features: "",
+  features_bn: "",
   deliveryDays: "7",
   revisions: "",
   isPopular: false,
@@ -132,13 +134,15 @@ const AdminServices = () => {
       const { id, serviceId, ...body } = data;
       const payload = {
         serviceId,
-        name: body.name,
-        tier: body.tier,
-        price: parseFloat(body.price),
-        features: body.features.split("\n").map((f) => f.trim()).filter(Boolean),
+        name:         body.name,
+        name_bn:      body.name_bn,
+        tier:         body.tier,
+        price:        parseFloat(body.price),
+        features:     body.features.split("\n").map((f) => f.trim()).filter(Boolean),
+        features_bn:  body.features_bn.split("\n").map((f) => f.trim()).filter(Boolean),
         deliveryDays: parseInt(body.deliveryDays, 10),
-        revisions: body.revisions === "" ? null : parseInt(body.revisions, 10),
-        isPopular: body.isPopular,
+        revisions:    body.revisions === "" ? null : parseInt(body.revisions, 10),
+        isPopular:    body.isPopular,
       };
       const r = id
         ? await apiFetch(`/api/admin/packages/${id}`, { method: "PUT", body: JSON.stringify(payload) })
@@ -196,13 +200,15 @@ const AdminServices = () => {
 
   const openEditPackage = (pkg: ServicePackage) => {
     setPackageForm({
-      name: pkg.name,
-      tier: pkg.tier,
-      price: pkg.price,
-      features: pkg.features.join("\n"),
+      name:         pkg.name,
+      name_bn:      (pkg as any).name_bn ?? "",
+      tier:         pkg.tier,
+      price:        pkg.price,
+      features:     pkg.features.join("\n"),
+      features_bn:  ((pkg as any).features_bn ?? []).join("\n"),
       deliveryDays: String(pkg.deliveryDays),
-      revisions: pkg.revisions === null ? "" : String(pkg.revisions),
-      isPopular: pkg.isPopular,
+      revisions:    pkg.revisions === null ? "" : String(pkg.revisions),
+      isPopular:    pkg.isPopular,
     });
     setPackageModal({ open: true, serviceId: pkg.serviceId, editing: pkg });
   };
@@ -442,16 +448,15 @@ const AdminServices = () => {
               </button>
             </div>
             <form onSubmit={handlePackageSubmit} className="px-6 py-5 space-y-4 max-h-[70vh] overflow-y-auto">
-              <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Name</label>
-                <input
-                  required
-                  value={packageForm.name}
-                  onChange={(e) => setPackageForm({ ...packageForm, name: e.target.value })}
-                  className="w-full bg-muted/40 border border-border/60 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-primary/50 transition-colors"
-                  data-testid="input-package-name"
-                />
-              </div>
+              <BilingualField
+                label="Package Name"
+                nameEn="name"
+                nameBn="name_bn"
+                valueEn={packageForm.name}
+                valueBn={packageForm.name_bn}
+                onChange={(field, val) => setPackageForm((prev) => ({ ...prev, [field]: val }))}
+                required
+              />
               <div>
                 <label className="block text-xs font-medium text-muted-foreground mb-1">Tier</label>
                 <select
@@ -482,18 +487,19 @@ const AdminServices = () => {
                   />
                 </div>
               ))}
-              <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Features (one per line)</label>
-                <textarea
-                  rows={4}
-                  required
-                  value={packageForm.features}
-                  onChange={(e) => setPackageForm({ ...packageForm, features: e.target.value })}
-                  placeholder="Feature 1&#10;Feature 2&#10;Feature 3"
-                  className="w-full bg-muted/40 border border-border/60 rounded-lg px-3 py-2 text-sm text-foreground resize-none focus:outline-none focus:border-primary/50 transition-colors"
-                  data-testid="input-package-features"
-                />
-              </div>
+              <BilingualField
+                label="Features (one per line)"
+                type="textarea"
+                rows={4}
+                nameEn="features"
+                nameBn="features_bn"
+                valueEn={packageForm.features}
+                valueBn={packageForm.features_bn}
+                onChange={(field, val) => setPackageForm((prev) => ({ ...prev, [field]: val }))}
+                required
+                placeholder={"Feature 1\nFeature 2\nFeature 3"}
+                placeholderBn={"বৈশিষ্ট্য ১\nবৈশিষ্ট্য ২\nবৈশিষ্ট্য ৩"}
+              />
               <div className="flex items-center gap-2">
                 <input
                   type="checkbox"
