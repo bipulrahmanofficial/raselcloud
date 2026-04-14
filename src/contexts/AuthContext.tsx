@@ -59,6 +59,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setIsLoading(false);
       return;
     }
+
     fetch("/api/auth/me", {
       headers: { Authorization: `Bearer ${stored}` },
     })
@@ -71,10 +72,35 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(u);
       })
       .catch(() => {
+        // /api/auth/me failed — try to decode the JWT locally as a fallback
+        // This allows local-admin to work even when Firebase/network is unavailable
+        try {
+          const parts = stored.split(".");
+          if (parts.length === 3) {
+            const payload = JSON.parse(atob(parts[1]));
+            const nowSec = Math.floor(Date.now() / 1000);
+            if (payload.exp && payload.exp > nowSec && payload.id && payload.email && payload.role) {
+              // Token is still valid — restore user from JWT payload
+              setToken(stored);
+              setUser({
+                id: payload.id,
+                name: payload.name ?? (payload.role === "admin" ? "Admin" : "User"),
+                email: payload.email,
+                role: payload.role,
+                phone: null,
+                avatarUrl: null,
+              });
+              return; // Don't clear token
+            }
+          }
+        } catch {
+          // JWT decode failed — token is corrupt, clear it
+        }
         localStorage.removeItem(TOKEN_KEY);
       })
       .finally(() => setIsLoading(false));
   }, []);
+
 
   useEffect(() => {
     const handleForceLogout = () => {
