@@ -118,7 +118,7 @@ function ProjectModal({
           {project.tags.length > 0 && (
             <div className="mb-8">
               <h3 className="text-sm font-semibold text-foreground mb-3 uppercase tracking-wider flex items-center gap-1.5">
-                <Tag size={13} className="text-muted-foreground" /> Tech Stack
+                <Tag size={13} className="text-muted-foreground" /> <span suppressHydrationWarning>{lv("Tech Stack", "প্রযুক্তিসমূহ")}</span>
               </h3>
               <div className="flex flex-wrap gap-2">
                 {project.tags.map((tag) => (
