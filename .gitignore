@@ -39,3 +39,8 @@ tsconfig.tsbuildinfo
 
 # Replit
 .replit
+
+# Uploaded files (server-specific, managed at runtime)
+public/uploads/*
+!public/uploads/.gitkeep
+
