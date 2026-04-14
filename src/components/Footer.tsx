@@ -10,13 +10,13 @@ const Footer = () => {
   const lv = useLangValue();
 
   const { data: settings } = useQuery<Record<string, string>>({
-    queryKey: ["/api/admin/settings"],
+    queryKey: ["/api/settings-public"],
     queryFn: async () => {
-      const r = await fetch("/api/admin/settings");
+      const r = await fetch("/api/settings-public");
       if (!r.ok) return {};
       return r.json();
     },
-    staleTime: 120_000,
+    staleTime: 60_000,
   });
 
   const footerText = settings?.footerText

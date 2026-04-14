@@ -285,12 +285,21 @@ const HeroSection = () => {
   const { data: settings } = useQuery<Record<string, string>>({
     queryKey: ["/api/settings-public"],
     queryFn: async () => {
-      const r = await fetch("/api/admin/settings");
+      const r = await fetch("/api/settings-public");
       if (!r.ok) return {};
       return r.json();
     },
-    staleTime: 120_000,
+    staleTime: 60_000,
   });
+
+  // Resolved heading: admin setting > translation keys
+  const heroLine1 = settings?.heroHeading
+    ? lv(settings.heroHeading, settings.heroHeading_bn)
+    : `${t.heroHeading1} ${t.heroHeading2} ${t.heroHeading3}`;
+
+  // Resolved button URLs from settings with safe defaults
+  const primaryUrl   = (settings?.heroCtaPrimaryUrl   || "/contact") as string;
+  const secondaryUrl = (settings?.heroCtaSecondaryUrl || "/portfolio") as string;
 
   useEffect(() => {
     if (reducedMotion) return;
@@ -368,27 +377,48 @@ const HeroSection = () => {
               <span className="w-10 h-px bg-[#FF4B4B]" />
             </div>
 
-            {/* Headline */}
+            {/* Headline — uses admin hero heading if set, otherwise translation */}
             <h1
               className="text-[1.85rem] sm:text-4xl lg:text-5xl xl:text-[4.5rem] font-black leading-[1.1] mb-5 animate-fade-in-up text-gray-900 dark:text-white"
               style={{ fontFamily: "var(--font-playfair), Georgia, serif", animationDelay: "100ms" }}
+              suppressHydrationWarning
             >
-              {t.heroHeading1}
-              <br />
-              <span
-                style={{
-                  background: "linear-gradient(120deg, #FF4B4B 0%, #FF8C00 45%, #14B8A6 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                  filter: "drop-shadow(0 0 20px rgba(255,75,75,0.5))",
-                  display: "inline-block",
-                }}
-              >
-                {t.heroHeading2}
-              </span>
-              <br />
-              {t.heroHeading3}
+              {settings?.heroHeading ? (
+                /* Admin-configured heading renders as a single block */
+                <span
+                  style={{
+                    background: "linear-gradient(120deg, #FF4B4B 0%, #FF8C00 45%, #14B8A6 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                    filter: "drop-shadow(0 0 20px rgba(255,75,75,0.3))",
+                    display: "inline",
+                  }}
+                  suppressHydrationWarning
+                >
+                  {heroLine1}
+                </span>
+              ) : (
+                /* Default 3-line layout using translation keys */
+                <>
+                  {t.heroHeading1}
+                  <br />
+                  <span
+                    style={{
+                      background: "linear-gradient(120deg, #FF4B4B 0%, #FF8C00 45%, #14B8A6 100%)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      backgroundClip: "text",
+                      filter: "drop-shadow(0 0 20px rgba(255,75,75,0.5))",
+                      display: "inline-block",
+                    }}
+                  >
+                    {t.heroHeading2}
+                  </span>
+                  <br />
+                  {t.heroHeading3}
+                </>
+              )}
             </h1>
 
             {/* Typewriter */}
@@ -420,26 +450,32 @@ const HeroSection = () => {
               style={{ animationDelay: "350ms" }}
             >
               <Link
-                href="/contact"
+                href={primaryUrl}
                 data-testid="link-hero-cta-primary"
                 className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full text-[15px] font-bold text-white transition-all duration-300 hover:scale-[1.03] active:scale-[0.98]"
                 style={{
                   background: "#FF4B4B",
                   boxShadow: "0 0 30px rgba(255,75,75,0.45), 0 4px 20px rgba(255,75,75,0.3), inset 0 1px 0 rgba(255,255,255,0.15)",
                 }}
+                suppressHydrationWarning
               >
                 <Phone size={16} />
-                {settings?.heroCtaText ? lv(settings.heroCtaText, settings.heroCtaText_bn) : t.heroCtaPrimary}
+                <span suppressHydrationWarning>
+                  {settings?.heroCtaText ? lv(settings.heroCtaText, settings.heroCtaText_bn) : t.heroCtaPrimary}
+                </span>
               </Link>
               <Link
-                href="/portfolio"
+                href={secondaryUrl}
                 data-testid="link-hero-cta-secondary"
                 className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full text-[15px] font-semibold transition-all duration-300
                   text-gray-800 border border-gray-300 hover:bg-gray-100
                   dark:text-white/90 dark:border-white/15 dark:hover:border-white/35 dark:hover:bg-white/5 dark:hover:text-white"
                 style={{ backdropFilter: "blur(12px)" }}
+                suppressHydrationWarning
               >
-                {settings?.heroCtaSecondaryText ? lv(settings.heroCtaSecondaryText, settings.heroCtaSecondaryText_bn) : t.heroCtaSecondary}
+                <span suppressHydrationWarning>
+                  {settings?.heroCtaSecondaryText ? lv(settings.heroCtaSecondaryText, settings.heroCtaSecondaryText_bn) : t.heroCtaSecondary}
+                </span>
                 <ArrowRight size={16} />
               </Link>
             </div>

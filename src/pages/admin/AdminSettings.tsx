@@ -132,8 +132,10 @@ const AdminSettings = () => {
     },
     onSuccess: (saved) => {
       queryClient.setQueryData(["/api/admin/settings"], saved);
+      // Also bust the public cache so visitors see the change immediately
+      queryClient.invalidateQueries({ queryKey: ["/api/settings-public"] });
       setDirty(false);
-      toast.success("Settings saved successfully!");
+      toast.success("Settings saved! Changes are now live on the public site.");
     },
     onError: () => toast.error("Failed to save settings"),
   });
@@ -170,24 +172,53 @@ const AdminSettings = () => {
 
       case "hero": return (
         <div>
+          <p className="text-xs text-white/40 pb-3 border-b border-white/5 mb-1">
+            Changes here are saved and immediately shown on the public website via <code className="bg-white/10 px-1 rounded">/api/settings-public</code>.
+            Leave any field blank to use the default translation text.
+          </p>
           <BilingualField label="Hero Heading" nameEn="heroHeading" nameBn="heroHeading_bn"
             valueEn={String(settings.heroHeading ?? "")} valueBn={String(settings.heroHeading_bn ?? "")}
             onChange={(n, v) => set(n, v)} type="textarea"
-            placeholder="We Build Digital Experiences That Drive Results"
-            placeholderBn="আমরা ডিজিটাল অভিজ্ঞতা তৈরি করি যা ফলাফল দেয়" />
+            placeholder="We Build, Grow & Transform Your Digital Presence."
+            placeholderBn="আপনার ডিজিটাল উপস্থিতি তৈরি, বৃদ্ধি ও রূপান্তর করি।" />
           <BilingualField label="Hero Subheading" nameEn="heroSubheading" nameBn="heroSubheading_bn"
             valueEn={String(settings.heroSubheading ?? "")} valueBn={String(settings.heroSubheading_bn ?? "")}
             onChange={(n, v) => set(n, v)} type="textarea"
             placeholder="Custom websites, AI automation, SEO & social media management..."
             placeholderBn="কাস্টম ওয়েবসাইট, এআই অটোমেশন, এসইও ও সোশ্যাল মিডিয়া ম্যানেজমেন্ট..." />
-          <BilingualField label="Primary CTA Button Text" nameEn="heroCtaText" nameBn="heroCtaText_bn"
-            valueEn={String(settings.heroCtaText ?? "")} valueBn={String(settings.heroCtaText_bn ?? "")}
-            onChange={(n, v) => set(n, v)} placeholder="Get Started" placeholderBn="শুরু করুন" />
-          <BilingualField label="Secondary CTA Button Text" nameEn="heroCtaSecondaryText" nameBn="heroCtaSecondaryText_bn"
-            valueEn={String(settings.heroCtaSecondaryText ?? "")} valueBn={String(settings.heroCtaSecondaryText_bn ?? "")}
-            onChange={(n, v) => set(n, v)} placeholder="View Portfolio" placeholderBn="পোর্টফোলিও দেখুন" />
+
+          <div className="pt-3 pb-2 border-b border-white/5">
+            <p className="text-xs font-semibold text-white/60 mb-3 uppercase tracking-wider">🔴 Primary Button (Left)</p>
+            <BilingualField label="Primary CTA Text" nameEn="heroCtaText" nameBn="heroCtaText_bn"
+              valueEn={String(settings.heroCtaText ?? "")} valueBn={String(settings.heroCtaText_bn ?? "")}
+              onChange={(n, v) => set(n, v)} placeholder="Get a Free Consultation" placeholderBn="যোগাযোগ করুন" />
+            <div className="py-3">
+              <label className="block text-sm font-medium text-white mb-1">Primary Button URL</label>
+              <p className="text-xs text-white/40 mb-2">Where does the primary button link to? (e.g. /contact)</p>
+              <input value={String(settings.heroCtaPrimaryUrl ?? "/contact")}
+                onChange={(e) => set("heroCtaPrimaryUrl", e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-white/25 focus:outline-none focus:border-red-500/50 transition-colors"
+                placeholder="/contact" />
+            </div>
+          </div>
+
+          <div className="pt-3">
+            <p className="text-xs font-semibold text-white/60 mb-3 uppercase tracking-wider">⬜ Secondary Button (Right)</p>
+            <BilingualField label="Secondary CTA Text" nameEn="heroCtaSecondaryText" nameBn="heroCtaSecondaryText_bn"
+              valueEn={String(settings.heroCtaSecondaryText ?? "")} valueBn={String(settings.heroCtaSecondaryText_bn ?? "")}
+              onChange={(n, v) => set(n, v)} placeholder="Our Demo" placeholderBn="আমাদের ডেমো" />
+            <div className="py-3">
+              <label className="block text-sm font-medium text-white mb-1">Secondary Button URL</label>
+              <p className="text-xs text-white/40 mb-2">Where does the secondary button link to? (e.g. /portfolio)</p>
+              <input value={String(settings.heroCtaSecondaryUrl ?? "/portfolio")}
+                onChange={(e) => set("heroCtaSecondaryUrl", e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-white/25 focus:outline-none focus:border-red-500/50 transition-colors"
+                placeholder="/portfolio" />
+            </div>
+          </div>
         </div>
       );
+
 
       case "contact": return (
         <div>
