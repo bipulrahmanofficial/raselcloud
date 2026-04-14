@@ -8,17 +8,26 @@ const SETTINGS_FILE = path.join(process.cwd(), "scripts", "site-settings.json");
 const PUBLIC_FIELDS = new Set([
   "siteName", "siteName_bn",
   "tagline", "tagline_bn",
+  // Hero section
   "heroHeading", "heroHeading_bn",
   "heroSubheading", "heroSubheading_bn",
   "heroCtaText", "heroCtaText_bn",
   "heroCtaPrimaryUrl",
   "heroCtaSecondaryText", "heroCtaSecondaryText_bn",
   "heroCtaSecondaryUrl",
+  // CTA banner section
+  "ctaHeading", "ctaHeading_bn",
+  "ctaDesc", "ctaDesc_bn",
+  "ctaBtn1Text", "ctaBtn1Text_bn", "ctaBtn1Url",
+  "ctaBtn2Text", "ctaBtn2Text_bn", "ctaBtn2Url",
+  // Footer & contact
   "footerText", "footerText_bn",
   "contactEmail", "contactPhone", "contactAddress", "contactAddress_bn",
   "whatsappNumber",
+  // Social
   "socialFacebook", "socialInstagram", "socialLinkedin",
   "socialTwitter", "socialYoutube", "socialGithub",
+  // Misc
   "announcementBar", "announcementBar_bn", "announcementBarEnabled",
   "statsProjects", "statsClients", "statsYears", "statsSatisfaction",
   "statsTagline", "statsTagline_bn",
@@ -32,6 +41,7 @@ function getDefaults(): Record<string, string | boolean> {
   return {
     siteName: "rasel.cloud",
     tagline: "Digital Agency & Web Solutions",
+    // Hero section
     heroHeading: "",
     heroSubheading: "Custom web solutions, AI automation, SEO growth & creative media — built for businesses of every scale.",
     heroSubheading_bn: "কাস্টম ওয়েব সমাধান, এআই অটোমেশন, এসইও গ্রোথ — সব আকারের ব্যবসার জন্য তৈরি।",
@@ -41,6 +51,18 @@ function getDefaults(): Record<string, string | boolean> {
     heroCtaSecondaryText: "",
     heroCtaSecondaryText_bn: "",
     heroCtaSecondaryUrl: "/portfolio",
+    // CTA banner section
+    ctaHeading: "",
+    ctaHeading_bn: "",
+    ctaDesc: "",
+    ctaDesc_bn: "",
+    ctaBtn1Text: "",
+    ctaBtn1Text_bn: "",
+    ctaBtn1Url: "/contact",
+    ctaBtn2Text: "",
+    ctaBtn2Text_bn: "",
+    ctaBtn2Url: "/portfolio",
+    // Footer
     footerText: "© 2025 rasel.cloud. All rights reserved.",
     footerText_bn: "© ২০২৫ রাসেল ক্লাউড। সর্বস্বত্ব সংরক্ষিত।",
     contactEmail: "hello@rasel.cloud",

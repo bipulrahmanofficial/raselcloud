@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Save, Globe, Palette, Phone, Share2, BarChart3, Code, Megaphone, RefreshCw } from "lucide-react";
+import { Save, Globe, Palette, Phone, Share2, BarChart3, Code, Megaphone, RefreshCw, Zap, Link2 } from "lucide-react";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { BilingualField } from "@/components/admin/BilingualField";
 import { apiFetch } from "@/lib/api";
@@ -11,13 +11,14 @@ import { toast } from "sonner";
 type Settings = Record<string, string | boolean>;
 
 const tabs = [
-  { id: "general", label: "General", icon: Globe },
-  { id: "hero", label: "Hero Section", icon: Megaphone },
-  { id: "contact", label: "Contact Info", icon: Phone },
-  { id: "social", label: "Social Media", icon: Share2 },
-  { id: "stats", label: "Stats & Numbers", icon: BarChart3 },
-  { id: "appearance", label: "Appearance", icon: Palette },
-  { id: "seo", label: "SEO & Analytics", icon: Code },
+  { id: "general",    label: "General",       icon: Globe },
+  { id: "hero",       label: "Hero Section",  icon: Megaphone },
+  { id: "cta",        label: "CTA Section",   icon: Zap },
+  { id: "contact",   label: "Contact Info",  icon: Phone },
+  { id: "social",    label: "Social Media",  icon: Share2 },
+  { id: "stats",     label: "Stats & Numbers", icon: BarChart3 },
+  { id: "appearance",label: "Appearance",    icon: Palette },
+  { id: "seo",       label: "SEO & Analytics", icon: Code },
 ];
 
 function Field({
@@ -279,6 +280,73 @@ const AdminSettings = () => {
             placeholderBn="পেশাদার ওয়েব ডেভেলপমেন্ট, এআই অটোমেশন, এসইও সেবা..." />
           <Field label="Google Analytics ID" description="e.g. G-XXXXXXXXXX or UA-XXXXXXX" name="googleAnalyticsId" value={settings.googleAnalyticsId ?? ""} onChange={set} placeholder="G-XXXXXXXXXX" />
           <Field label="Facebook Pixel ID" name="facebookPixelId" value={settings.facebookPixelId ?? ""} onChange={set} placeholder="1234567890" />
+        </div>
+      );
+
+      case "cta": return (
+        <div>
+          <p className="text-xs text-white/40 pb-3 border-b border-white/5 mb-1">
+            Controls the <strong className="text-white/60">full-width CTA banner</strong> shown at the bottom of the homepage.
+            Leave any field blank to keep the default translation text.
+          </p>
+
+          <BilingualField label="CTA Heading" nameEn="ctaHeading" nameBn="ctaHeading_bn"
+            valueEn={String(settings.ctaHeading ?? "")} valueBn={String(settings.ctaHeading_bn ?? "")}
+            onChange={(n, v) => set(n, v)} type="textarea"
+            placeholder="Ready to Elevate Your Business?"
+            placeholderBn="আপনার ব্যবসাকে এগিয়ে নিতে প্রস্তুত?" />
+
+          <BilingualField label="CTA Description" nameEn="ctaDesc" nameBn="ctaDesc_bn"
+            valueEn={String(settings.ctaDesc ?? "")} valueBn={String(settings.ctaDesc_bn ?? "")}
+            onChange={(n, v) => set(n, v)} type="textarea" rows={3}
+            placeholder="Whether you need a custom web app, AI automation, or stunning content — rasel.cloud is your team."
+            placeholderBn="কাস্টম ওয়েব অ্যাপ, এআই অটোমেশন বা চমৎকার কন্টেন্ট — rasel.cloud আপনার দল।" />
+
+          {/* Primary CTA Button */}
+          <div className="pt-4 pb-3 border-b border-white/5">
+            <p className="text-xs font-semibold text-white/60 mb-3 uppercase tracking-wider flex items-center gap-1.5">
+              <span className="w-3 h-3 rounded-full bg-primary inline-block" /> Primary Button (Left, Red)
+            </p>
+            <BilingualField label="Button Text" nameEn="ctaBtn1Text" nameBn="ctaBtn1Text_bn"
+              valueEn={String(settings.ctaBtn1Text ?? "")} valueBn={String(settings.ctaBtn1Text_bn ?? "")}
+              onChange={(n, v) => set(n, v)}
+              placeholder="Get a Free Consultation" placeholderBn="বিনামূল্যে পরামর্শ নিন" />
+            <div className="py-3">
+              <label className="block text-sm font-medium text-white mb-1 flex items-center gap-1.5">
+                <Link2 size={13} className="text-white/40" /> Button URL
+              </label>
+              <p className="text-xs text-white/30 mb-2">Use a relative path like <code className="bg-white/10 px-1 rounded">/contact</code> or a full URL like <code className="bg-white/10 px-1 rounded">https://wa.me/8801700000000</code></p>
+              <input
+                value={String(settings.ctaBtn1Url ?? "/contact")}
+                onChange={(e) => set("ctaBtn1Url", e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-white/25 focus:outline-none focus:border-red-500/50 transition-colors font-mono"
+                placeholder="/contact"
+              />
+            </div>
+          </div>
+
+          {/* Secondary CTA Button */}
+          <div className="pt-4">
+            <p className="text-xs font-semibold text-white/60 mb-3 uppercase tracking-wider flex items-center gap-1.5">
+              <span className="w-3 h-3 rounded-full bg-white/20 border border-white/30 inline-block" /> Secondary Button (Right, Outline)
+            </p>
+            <BilingualField label="Button Text" nameEn="ctaBtn2Text" nameBn="ctaBtn2Text_bn"
+              valueEn={String(settings.ctaBtn2Text ?? "")} valueBn={String(settings.ctaBtn2Text_bn ?? "")}
+              onChange={(n, v) => set(n, v)}
+              placeholder="See Our Work" placeholderBn="আমাদের কাজ দেখুন" />
+            <div className="py-3">
+              <label className="block text-sm font-medium text-white mb-1 flex items-center gap-1.5">
+                <Link2 size={13} className="text-white/40" /> Button URL
+              </label>
+              <p className="text-xs text-white/30 mb-2">Relative or absolute URL. Examples: <code className="bg-white/10 px-1 rounded">/portfolio</code>, <code className="bg-white/10 px-1 rounded">/services</code></p>
+              <input
+                value={String(settings.ctaBtn2Url ?? "/portfolio")}
+                onChange={(e) => set("ctaBtn2Url", e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-white/25 focus:outline-none focus:border-red-500/50 transition-colors font-mono"
+                placeholder="/portfolio"
+              />
+            </div>
+          </div>
         </div>
       );
 
