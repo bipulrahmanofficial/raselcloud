@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { findServiceBySlug, listPackages } from "@lib/firestore";
+import { getLocalService } from "@lib/local-data";
 
 export const revalidate = 60;
 
@@ -16,7 +17,11 @@ export async function GET(_req: NextRequest, { params }: { params: { slug: strin
       headers: { "Cache-Control": "public, max-age=30, s-maxage=60, stale-while-revalidate=300" },
     });
   } catch (err) {
-    console.error("Service detail error:", err);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    // ── Firebase not configured — fall back to local db-export.json ──
+    console.warn("Service detail: Firebase unavailable, using local data.", String(err));
+    const localSvc = getLocalService(slug);
+    if (!localSvc) return NextResponse.json({ error: "Service not found" }, { status: 404 });
+    return NextResponse.json(localSvc);
   }
 }
+

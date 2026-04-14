@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { findPostBySlug, findUserById } from "@lib/firestore";
+import { getLocalBlogPost } from "@lib/local-data";
 
 export const revalidate = 3600;
 
@@ -33,7 +34,22 @@ export async function GET(
       { headers: { "Cache-Control": "public, max-age=60, s-maxage=3600, stale-while-revalidate=86400" } }
     );
   } catch (error) {
-    console.error("GET /api/blog/[slug] error:", error);
-    return NextResponse.json({ error: "Failed to fetch post" }, { status: 500 });
+    // ── Firebase not configured — fall back to local db-export.json ──
+    console.warn("Blog post: Firebase unavailable, using local data.", String(error));
+    const localPost = getLocalBlogPost(params.slug);
+    if (!localPost) return NextResponse.json({ error: "Post not found" }, { status: 404 });
+    return NextResponse.json({
+      id: localPost.id,
+      slug: localPost.slug,
+      title: localPost.title,
+      excerpt: localPost.excerpt,
+      content: localPost.content,
+      coverImage: localPost.coverImage ?? null,
+      tags: localPost.tags,
+      publishedAt: localPost.publishedAt ?? null,
+      createdAt: localPost.createdAt,
+      authorName: localPost.authorName ?? "rasel.cloud Team",
+    });
   }
 }
+

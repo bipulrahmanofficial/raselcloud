@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { listPublishedPosts, findUserById } from "@lib/firestore";
+import { getLocalBlogPosts } from "@lib/local-data";
 
 export const revalidate = 3600;
 
@@ -29,7 +30,25 @@ export async function GET() {
       headers: { "Cache-Control": "public, max-age=60, s-maxage=3600, stale-while-revalidate=86400" },
     });
   } catch (error) {
-    console.error("GET /api/blog error:", error);
-    return NextResponse.json({ error: "Failed to fetch posts" }, { status: 500 });
+    // ── Firebase not configured — fall back to local db-export.json ──
+    console.warn("Blog: Firebase unavailable, falling back to local data.", String(error));
+    try {
+      const localPosts = getLocalBlogPosts().map((p) => ({
+        id: p.id,
+        slug: p.slug,
+        title: p.title,
+        excerpt: p.excerpt,
+        coverImage: p.coverImage ?? null,
+        tags: p.tags,
+        publishedAt: p.publishedAt ?? null,
+        createdAt: p.createdAt,
+        authorName: p.authorName ?? "rasel.cloud Team",
+      }));
+      return NextResponse.json(localPosts);
+    } catch (localErr) {
+      console.error("Local blog fallback failed:", localErr);
+      return NextResponse.json({ error: "Failed to fetch posts" }, { status: 500 });
+    }
   }
 }
+

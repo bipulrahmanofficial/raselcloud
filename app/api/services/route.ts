@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import { listServices, listPackages } from "@lib/firestore";
+import { getLocalServices, getLocalPackages } from "@lib/local-data";
 
 export const revalidate = 60;
 
@@ -40,7 +41,30 @@ export async function GET(req: NextRequest) {
       headers: { "Cache-Control": "public, max-age=30, s-maxage=60, stale-while-revalidate=300" },
     });
   } catch (err) {
-    console.error("Services fetch error:", err);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    // ── Firebase not configured — fall back to local db-export.json ──
+    console.warn("Services: Firebase unavailable, falling back to local data.", String(err));
+    try {
+      const localSvcs = getLocalServices();
+      if (includePackages) {
+        return NextResponse.json(localSvcs);
+      }
+      const result = localSvcs.map((svc) => {
+        const startingPrice = svc.packages.length > 0
+          ? svc.packages.reduce((min, p) =>
+              parseFloat(p.price) < parseFloat(min) ? p.price : min,
+              svc.packages[0].price)
+          : null;
+        return {
+          ...svc,
+          packages: undefined,
+          description: svc.description.slice(0, 160),
+          startingPrice,
+        };
+      });
+      return NextResponse.json(result);
+    } catch (localErr) {
+      console.error("Local data fallback failed:", localErr);
+      return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    }
   }
 }
