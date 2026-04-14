@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useLangValue } from "@/hooks/useLangValue";
 import { useQuery } from "@tanstack/react-query";
-import { MountedText } from "@/components/MountedText";
 
 const Footer = () => {
   const { t } = useLanguage();
@@ -42,8 +41,8 @@ const Footer = () => {
                 { label: t.navPortfolio, to: "/portfolio" },
               ].map((l) => (
                 <li key={l.to}>
-                  <Link href={l.to} className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-                    <MountedText>{l.label}</MountedText>
+                  <Link href={l.to} suppressHydrationWarning className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+                    <span suppressHydrationWarning>{l.label}</span>
                   </Link>
                 </li>
               ))}
@@ -60,8 +59,8 @@ const Footer = () => {
                 { label: t.navContact, to: "/contact" },
               ].map((l) => (
                 <li key={l.to}>
-                  <Link href={l.to} className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-                    <MountedText>{l.label}</MountedText>
+                  <Link href={l.to} suppressHydrationWarning className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+                    <span suppressHydrationWarning>{l.label}</span>
                   </Link>
                 </li>
               ))}
@@ -77,8 +76,8 @@ const Footer = () => {
                 { label: t.navFaq ?? "FAQ", to: "/faq" },
               ].map((l) => (
                 <li key={l.to}>
-                  <Link href={l.to} className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-                    <MountedText>{l.label}</MountedText>
+                  <Link href={l.to} suppressHydrationWarning className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+                    <span suppressHydrationWarning>{l.label}</span>
                   </Link>
                 </li>
               ))}
@@ -93,11 +92,11 @@ const Footer = () => {
             {" "}· All rights reserved.
           </p>
           <div className="flex gap-4 text-xs text-muted-foreground">
-            <Link href="/privacy" className="hover:text-foreground transition-colors">
-              <MountedText>{t.navPrivacy ?? "Privacy"}</MountedText>
+            <Link href="/privacy" suppressHydrationWarning className="hover:text-foreground transition-colors">
+              <span suppressHydrationWarning>{t.navPrivacy ?? "Privacy"}</span>
             </Link>
-            <Link href="/terms" className="hover:text-foreground transition-colors">
-              <MountedText>{t.navTerms ?? "Terms"}</MountedText>
+            <Link href="/terms" suppressHydrationWarning className="hover:text-foreground transition-colors">
+              <span suppressHydrationWarning>{t.navTerms ?? "Terms"}</span>
             </Link>
           </div>
         </div>

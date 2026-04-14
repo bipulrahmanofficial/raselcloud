@@ -624,28 +624,38 @@ const LanguageContext = createContext<LanguageContextType>({
 });
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  // Always start with "en" so server HTML matches the first client render (no hydration mismatch).
-  // After mount we read localStorage and switch if needed.
+  // Always start with "en" so server HTML matches the first client render.
+  // We track `hydrated` separately to ensure we NEVER change the language
+  // while React is still reconciling Suspense boundaries.
   const [lang, setLangState] = useState<Lang>("en");
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    // Step 1: restore stored preference
-    const stored = localStorage.getItem("lang");
-    if (stored === "bn" || stored === "en") {
-      setLangState(stored as Lang);
-      return;
-    }
-    // Step 2: country-code shortcut (set by geo-detect on a previous visit)
-    const country = localStorage.getItem("rc_country");
-    if (country === "BD") { setLangState("bn"); return; }
-    if (country !== null) return; // other country → keep "en"
-    // Step 3: geo-detect (first visit, no stored data)
-    import("@/lib/geoLocale").then(({ detectGeoLocale }) =>
-      detectGeoLocale().then(({ lang: detected }) => {
-        setLangState(detected as Lang);
-        localStorage.setItem("lang", detected);
-      })
-    );
+    // Mark hydration complete on the next tick (after React has committed
+    // and all Suspense boundaries have resolved their client HTML).
+    const timer = setTimeout(() => {
+      setHydrated(true);
+
+      // Step 1: restore stored preference
+      const stored = localStorage.getItem("lang");
+      if (stored === "bn" || stored === "en") {
+        setLangState(stored as Lang);
+        return;
+      }
+      // Step 2: country-code shortcut (set by geo-detect on a previous visit)
+      const country = localStorage.getItem("rc_country");
+      if (country === "BD") { setLangState("bn"); return; }
+      if (country !== null) return; // other country → keep "en"
+      // Step 3: geo-detect (first visit, no stored data)
+      import("@/lib/geoLocale").then(({ detectGeoLocale }) =>
+        detectGeoLocale().then(({ lang: detected }) => {
+          setLangState(detected as Lang);
+          localStorage.setItem("lang", detected);
+        })
+      );
+    }, 0);
+
+    return () => clearTimeout(timer);
   }, []);
 
   const handleSetLang = (newLang: Lang) => {
@@ -653,8 +663,12 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("lang", newLang);
   };
 
+  // During hydration, always expose "en" regardless of detected lang.
+  // After hydration is confirmed complete, expose the real lang.
+  const effectiveLang: Lang = hydrated ? lang : "en";
+
   return (
-    <LanguageContext.Provider value={{ lang, setLang: handleSetLang, t: translations[lang] }}>
+    <LanguageContext.Provider value={{ lang: effectiveLang, setLang: handleSetLang, t: translations[effectiveLang] }}>
       {children}
     </LanguageContext.Provider>
   );
