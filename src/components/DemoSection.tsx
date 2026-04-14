@@ -65,18 +65,44 @@ function ProjectModal({
           <X size={16} />
         </button>
 
-        {/* Hero image */}
-        <div className="relative h-52 md:h-72 overflow-hidden rounded-t-2xl bg-muted/20">
+        {/* Infinite-scroll screenshot banner */}
+        <div className="relative h-52 md:h-72 overflow-hidden rounded-t-2xl bg-muted/20 group/banner">
           {project.image ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={project.image} alt={title} className="w-full h-full object-cover" />
+            <>
+              <div className="absolute inset-x-0 top-0 animate-scroll-banner will-change-transform"
+                style={{ animationDuration: "18s", animationTimingFunction: "linear", animationIterationCount: "infinite" }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={project.image} alt={title} className="w-full object-cover object-top" style={{ height: "560px" }} />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={project.image} alt="" className="w-full object-cover object-top" style={{ height: "560px" }} aria-hidden="true" />
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent pointer-events-none" />
+              <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-black/40 backdrop-blur-sm border border-white/10 text-white/70 text-[10px] font-medium pointer-events-none">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+                Scrolling Preview
+              </div>
+              {project.liveUrl && (
+                <a href={project.liveUrl} target="_blank" rel="noopener noreferrer"
+                  className="absolute inset-0 flex flex-col items-center justify-center gap-2 opacity-0 group-hover/banner:opacity-100 transition-all duration-300 bg-black/30 backdrop-blur-[2px]"
+                  onClick={(e) => e.stopPropagation()}>
+                  <div className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-emerald-500 text-white text-sm font-bold shadow-[0_0_24px_rgba(16,185,129,0.6)] hover:bg-emerald-400 transition-colors">
+                    <span className="relative flex h-2.5 w-2.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-60" />
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white" />
+                    </span>
+                    <span suppressHydrationWarning>{lv("Open Live Site", "লাইভ সাইট খুলুন")}</span>
+                    <ExternalLink size={14} />
+                  </div>
+                  <span className="text-white/60 text-xs" suppressHydrationWarning>{lv("Click to visit", "ক্লিক করুন")}</span>
+                </a>
+              )}
+            </>
           ) : (
             <div className="w-full h-full flex items-center justify-center">
               <Icon size={64} className="text-muted-foreground/20" />
             </div>
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
-          <div className="absolute bottom-4 left-6">
+          <div className="absolute bottom-4 left-6 pointer-events-none">
             <div className="flex items-center gap-2 bg-background/90 backdrop-blur-sm px-4 py-2 rounded-full border border-border/40 shadow-lg">
               <TrendingUp size={14} className="text-primary" />
               <span className="text-sm font-bold text-primary" suppressHydrationWarning>{metric}</span>
@@ -134,13 +160,18 @@ function ProjectModal({
                 href={project.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group/live w-full inline-flex items-center justify-center gap-3 py-3.5 rounded-xl bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 hover:bg-emerald-500/35 hover:border-emerald-400 hover:text-white transition-all duration-300 shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] text-sm font-bold tracking-wide"
+                className="group/live w-full inline-flex items-center justify-center gap-3 py-4 rounded-xl
+                  bg-emerald-500 hover:bg-emerald-400
+                  text-white font-bold text-sm tracking-wide
+                  shadow-[0_4px_20px_rgba(16,185,129,0.45)] hover:shadow-[0_6px_32px_rgba(16,185,129,0.7)]
+                  border border-emerald-400/40 hover:border-emerald-300
+                  transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98]"
               >
                 <span className="relative flex h-3 w-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500" />
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-50" />
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-white" />
                 </span>
-                <span suppressHydrationWarning>{lv("🚀 Visit Live Site", "🚀 লাইভ সাইট দেখুন")}</span>
+                <span suppressHydrationWarning>{lv("🚀 Open Live Site", "🚀 লাইভ সাইট খুলুন")}</span>
                 <ExternalLink size={16} className="transition-transform group-hover/live:translate-x-1 group-hover/live:-translate-y-1" />
               </a>
             )}

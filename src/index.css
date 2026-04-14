@@ -272,8 +272,19 @@
     .animate-fade-in-up,
     .animate-navbar-in,
     .animate-fade-in,
-    .animate-dropdown-in {
+    .animate-dropdown-in,
+    .animate-scroll-banner {
       animation: none;
     }
+  }
+
+  /* Portfolio modal — infinite screenshot scroll */
+  .animate-scroll-banner {
+    animation: scroll-banner linear infinite;
+  }
+
+  @keyframes scroll-banner {
+    0%   { transform: translateY(0); }
+    100% { transform: translateY(-50%); }
   }
 }
