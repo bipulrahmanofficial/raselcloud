@@ -1,45 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
 import { requireAdmin } from "@lib/auth";
-import { listServices, listPackages, createService } from "@lib/firestore";
-import { getLocalServicesAll, getLocalPackages } from "@lib/local-data";
-
-const serviceSchema = z.object({
-  title: z.string().min(2).max(200),
-  slug: z.string().min(2).max(100),
-  category: z.string().min(1),
-  description: z.string(),
-  imageUrl: z.string().optional(),
-  tags: z.array(z.string()).optional(),
-  isActive: z.boolean().optional(),
-});
+import {
+  readLocalServices,
+  readLocalPackages,
+  createLocalService,
+} from "@lib/local-services-store";
 
 export async function GET(req: NextRequest) {
   const { user, error, status } = await requireAdmin(req);
   if (!user) return NextResponse.json({ error }, { status });
 
   try {
-    const allServices = await listServices(false);
-    const allPackages = await listPackages();
+    const allServices = readLocalServices();
+    const allPackages = readLocalPackages();
     const result = allServices.map((svc) => ({
       ...svc,
       packages: allPackages.filter((p) => p.serviceId === svc.id),
     }));
     return NextResponse.json(result);
-  } catch {
-    // Firebase unavailable — fall back to local db-export.json (all services, incl. inactive)
-    try {
-      const svcs = getLocalServicesAll();
-      const pkgs = getLocalPackages();
-      const result = svcs.map((svc) => ({
-        ...svc,
-        packages: pkgs.filter((p) => p.serviceId === svc.id),
-      }));
-      return NextResponse.json(result);
-    } catch (localErr) {
-      console.error("Local fallback failed:", localErr);
-      return NextResponse.json({ error: "Internal server error" }, { status: 500 });
-    }
+  } catch (err) {
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -48,19 +28,21 @@ export async function POST(req: NextRequest) {
   if (!user) return NextResponse.json({ error }, { status });
 
   const body = await req.json().catch(() => null);
-  const result = serviceSchema.safeParse(body);
-  if (!result.success) return NextResponse.json({ error: "Validation failed", issues: result.error.issues }, { status: 400 });
+  if (!body?.title || !body?.slug || !body?.category) {
+    return NextResponse.json({ error: "title, slug, and category are required" }, { status: 400 });
+  }
 
   try {
-    const { title, slug, category, description, imageUrl, tags, isActive } = result.data;
-    const svc = await createService({
-      title,
-      slug,
-      category,
-      description,
-      tags: tags ?? [],
-      isActive: isActive ?? true,
-      imageUrl: imageUrl ?? null,
+    const svc = createLocalService({
+      title:       body.title ?? "",
+      title_bn:    body.title_bn ?? "",
+      slug:        body.slug ?? "",
+      category:    body.category ?? "",
+      description: body.description ?? "",
+      description_bn: body.description_bn ?? "",
+      imageUrl:    body.imageUrl ?? null,
+      tags:        Array.isArray(body.tags) ? body.tags : [],
+      isActive:    body.isActive !== false,
     });
     return NextResponse.json(svc, { status: 201 });
   } catch (err) {

@@ -1,28 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
 import { requireAdmin } from "@lib/auth";
-import { updateService, deleteService } from "@lib/firestore";
-
-const serviceSchema = z.object({
-  title: z.string().min(2).max(200).optional(),
-  slug: z.string().min(2).max(100).optional(),
-  category: z.string().min(1).optional(),
-  description: z.string().optional(),
-  imageUrl: z.string().optional().nullable(),
-  tags: z.array(z.string()).optional(),
-  isActive: z.boolean().optional(),
-});
+import {
+  updateLocalService,
+  deleteLocalService,
+} from "@lib/local-services-store";
 
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   const { user, error, status } = await requireAdmin(req);
   if (!user) return NextResponse.json({ error }, { status });
 
   const body = await req.json().catch(() => null);
-  const result = serviceSchema.safeParse(body);
-  if (!result.success) return NextResponse.json({ error: "Validation failed" }, { status: 400 });
+  if (!body) return NextResponse.json({ error: "Invalid body" }, { status: 400 });
 
   try {
-    const updated = await updateService(params.id, result.data as Record<string, unknown>);
+    const updated = updateLocalService(params.id, {
+      ...(body.title        !== undefined && { title:          body.title }),
+      ...(body.title_bn     !== undefined && { title_bn:       body.title_bn }),
+      ...(body.slug         !== undefined && { slug:           body.slug }),
+      ...(body.category     !== undefined && { category:       body.category }),
+      ...(body.description  !== undefined && { description:    body.description }),
+      ...(body.description_bn !== undefined && { description_bn: body.description_bn }),
+      ...(body.imageUrl     !== undefined && { imageUrl:       body.imageUrl }),
+      ...(body.tags         !== undefined && { tags:           body.tags }),
+      ...(body.isActive     !== undefined && { isActive:       body.isActive }),
+    });
     if (!updated) return NextResponse.json({ error: "Service not found" }, { status: 404 });
     return NextResponse.json(updated);
   } catch (err) {
@@ -35,7 +36,8 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
   if (!user) return NextResponse.json({ error }, { status });
 
   try {
-    await deleteService(params.id);
+    const deleted = deleteLocalService(params.id);
+    if (!deleted) return NextResponse.json({ error: "Service not found" }, { status: 404 });
     return NextResponse.json({ success: true });
   } catch (err) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

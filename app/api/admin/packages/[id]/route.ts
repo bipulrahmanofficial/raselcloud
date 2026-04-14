@@ -1,31 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
 import { requireAdmin } from "@lib/auth";
-import { updatePackage, deletePackage } from "@lib/firestore";
-
-const packageSchema = z.object({
-  serviceId: z.string().min(1).optional(),
-  name: z.string().min(1).max(100).optional(),
-  tier: z.string().min(1).optional(),
-  price: z.number().or(z.string()).optional(),
-  features: z.array(z.string()).optional(),
-  deliveryDays: z.number().int().positive().optional(),
-  revisions: z.number().int().min(0).nullable().optional(),
-  isPopular: z.boolean().optional(),
-});
+import {
+  updateLocalPackage,
+  deleteLocalPackage,
+} from "@lib/local-services-store";
 
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   const { user, error, status } = await requireAdmin(req);
   if (!user) return NextResponse.json({ error }, { status });
 
   const body = await req.json().catch(() => null);
-  const result = packageSchema.safeParse(body);
-  if (!result.success) return NextResponse.json({ error: "Validation failed" }, { status: 400 });
+  if (!body) return NextResponse.json({ error: "Invalid body" }, { status: 400 });
 
   try {
-    const { price, ...rest } = result.data;
-    const data = { ...rest, ...(price !== undefined ? { price: String(price) } : {}) };
-    const updated = await updatePackage(params.id, data);
+    const updated = updateLocalPackage(params.id, {
+      ...(body.name         !== undefined && { name:         body.name }),
+      ...(body.name_bn      !== undefined && { name_bn:      body.name_bn }),
+      ...(body.tier         !== undefined && { tier:         body.tier }),
+      ...(body.price        !== undefined && { price:        String(body.price) }),
+      ...(body.features     !== undefined && { features:     body.features }),
+      ...(body.features_bn  !== undefined && { features_bn:  body.features_bn }),
+      ...(body.deliveryDays !== undefined && { deliveryDays: Number(body.deliveryDays) }),
+      ...(body.revisions    !== undefined && { revisions:    body.revisions }),
+      ...(body.isPopular    !== undefined && { isPopular:    body.isPopular }),
+    });
     if (!updated) return NextResponse.json({ error: "Package not found" }, { status: 404 });
     return NextResponse.json(updated);
   } catch (err) {
@@ -38,7 +36,8 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
   if (!user) return NextResponse.json({ error }, { status });
 
   try {
-    await deletePackage(params.id);
+    const deleted = deleteLocalPackage(params.id);
+    if (!deleted) return NextResponse.json({ error: "Package not found" }, { status: 404 });
     return NextResponse.json({ success: true });
   } catch (err) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

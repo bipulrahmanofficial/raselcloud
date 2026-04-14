@@ -1,0 +1,116 @@
+[
+  {
+    "id": "7034a7f3-c06c-46b8-8097-8c4d3d352c37",
+    "title": "Custom Web & Admin Panels",
+    "title_bn": "",
+    "slug": "web-development",
+    "category": "development",
+    "description": "Enterprise-grade websites, admin dashboards, e-commerce platforms, and management systems built with modern frameworks. Scalable, secure, and pixel-perfect designs with full CMS integration and mobile responsiveness.",
+    "description_bn": "",
+    "imageUrl": "https://images.unsplash.com/photo-1547658719-da2b51169166?w=800&q=80",
+    "tags": [
+      "web development",
+      "admin panel",
+      "e-commerce",
+      "React",
+      "Node.js"
+    ],
+    "isActive": true,
+    "createdAt": "2026-03-30T03:43:05.590Z"
+  },
+  {
+    "id": "7d0d6173-ae0c-47d4-a521-f5d488c2b439",
+    "title": "AI Agent Automation",
+    "title_bn": "",
+    "slug": "ai-automation",
+    "category": "automation",
+    "description": "Deploy intelligent AI agents for social media management, website chatbots, and business workflow automation. Automate repetitive tasks, reduce costs, and scale your operations on autopilot with cutting-edge AI technology.",
+    "description_bn": "",
+    "imageUrl": "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80",
+    "tags": [
+      "AI automation",
+      "chatbot",
+      "workflow",
+      "GPT",
+      "social media bot"
+    ],
+    "isActive": true,
+    "createdAt": "2026-03-30T03:43:05.605Z"
+  },
+  {
+    "id": "2bcd71d2-ab69-45c1-9d14-c174da9a70d6",
+    "title": "SEO & Digital Growth",
+    "title_bn": "",
+    "slug": "seo-growth",
+    "category": "marketing",
+    "description": "Dominate search rankings with comprehensive technical SEO, strategic content marketing, and performance optimization. Data-driven campaigns that deliver measurable results and sustainable organic traffic growth.",
+    "description_bn": "",
+    "imageUrl": "https://images.unsplash.com/photo-1562577309-4932fdd64cd1?w=800&q=80",
+    "tags": [
+      "SEO",
+      "digital marketing",
+      "content strategy",
+      "link building",
+      "Google ranking"
+    ],
+    "isActive": true,
+    "createdAt": "2026-03-30T03:43:05.618Z"
+  },
+  {
+    "id": "1a4ccc5e-daa8-4566-aff3-0f2f9db74822",
+    "title": "Creative Media & Design",
+    "title_bn": "",
+    "slug": "creative-media",
+    "category": "design",
+    "description": "Professional video editing, motion graphics, brand identity design, and social media content creation. Elevate your brand with stunning visuals that captivate your audience and drive engagement across all platforms.",
+    "description_bn": "",
+    "imageUrl": "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=800&q=80",
+    "tags": [
+      "video editing",
+      "motion graphics",
+      "brand design",
+      "social media",
+      "content creation"
+    ],
+    "isActive": true,
+    "createdAt": "2026-03-30T03:43:05.629Z"
+  },
+  {
+    "id": "f33aa9cd-d13e-4528-950b-332c71ceb45c",
+    "title": "Social Media Management",
+    "title_bn": "",
+    "slug": "social-media-management",
+    "category": "marketing",
+    "description": "Strategic social media presence management across all major platforms. Content planning, scheduling, community engagement, analytics tracking, and growth strategies that build your brand and drive conversions.",
+    "description_bn": "",
+    "imageUrl": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80",
+    "tags": [
+      "social media",
+      "Instagram",
+      "Facebook",
+      "LinkedIn",
+      "content strategy"
+    ],
+    "isActive": true,
+    "createdAt": "2026-03-30T03:43:05.640Z"
+  },
+  {
+    "id": "286d5867-c01f-4f93-aee0-ecea357ea312",
+    "title": "E-Commerce Solutions",
+    "title_bn": "",
+    "slug": "e-commerce-solutions",
+    "category": "development",
+    "description": "Complete online store setup with payment integration, inventory management, and beautiful storefront design. From Shopify customization to fully custom platforms, we build stores that convert visitors into loyal customers.",
+    "description_bn": "",
+    "imageUrl": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80",
+    "tags": [
+      "e-commerce",
+      "Shopify",
+      "WooCommerce",
+      "online store",
+      "payment gateway"
+    ],
+    "isActive": true,
+    "createdAt": "2026-03-30T03:43:05.651Z"
+  }
+]

@@ -1,19 +1,23 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
-import { listServices, listPackages } from "@lib/firestore";
-import { getLocalServices, getLocalPackages } from "@lib/local-data";
+import {
+  readLocalServices,
+  readLocalPackages,
+  getActiveLocalServices,
+} from "@lib/local-services-store";
 
-export const revalidate = 60;
+// Re-validate every 30s in production
+export const revalidate = 30;
 
 export async function GET(req: NextRequest) {
   const includePackages = req.nextUrl.searchParams.get("include") === "packages";
 
   try {
-    const svcs = await listServices(true);
+    const allServices = getActiveLocalServices();
+    const allPkgs = readLocalPackages();
 
     if (includePackages) {
-      const allPkgs = await listPackages();
-      const result = svcs.map((svc) => ({
+      const result = allServices.map((svc) => ({
         ...svc,
         packages: allPkgs.filter((p) => p.serviceId === svc.id),
       }));
@@ -22,7 +26,7 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    const allPkgs = await listPackages();
+    // Build startingPrice from packages
     const priceMap = new Map<string, string>();
     for (const pkg of allPkgs) {
       const cur = priceMap.get(pkg.serviceId);
@@ -31,9 +35,9 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    const result = svcs.map((svc) => ({
+    const result = allServices.map((svc) => ({
       ...svc,
-      description: svc.description.slice(0, 160),
+      packages: allPkgs.filter((p) => p.serviceId === svc.id),
       startingPrice: priceMap.get(svc.id) ?? null,
     }));
 
@@ -41,30 +45,7 @@ export async function GET(req: NextRequest) {
       headers: { "Cache-Control": "public, max-age=30, s-maxage=60, stale-while-revalidate=300" },
     });
   } catch (err) {
-    // ── Firebase not configured — fall back to local db-export.json ──
-    console.warn("Services: Firebase unavailable, falling back to local data.", String(err));
-    try {
-      const localSvcs = getLocalServices();
-      if (includePackages) {
-        return NextResponse.json(localSvcs);
-      }
-      const result = localSvcs.map((svc) => {
-        const startingPrice = svc.packages.length > 0
-          ? svc.packages.reduce((min, p) =>
-              parseFloat(p.price) < parseFloat(min) ? p.price : min,
-              svc.packages[0].price)
-          : null;
-        return {
-          ...svc,
-          packages: undefined,
-          description: svc.description.slice(0, 160),
-          startingPrice,
-        };
-      });
-      return NextResponse.json(result);
-    } catch (localErr) {
-      console.error("Local data fallback failed:", localErr);
-      return NextResponse.json({ error: "Internal server error" }, { status: 500 });
-    }
+    console.error("Services API error:", err);
+    return NextResponse.json([], { status: 200 });
   }
 }
