@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Save, Globe, Palette, Phone, Share2, BarChart3, Code, Megaphone, RefreshCw } from "lucide-react";
 import AdminLayout from "@/components/admin/AdminLayout";
+import { BilingualField } from "@/components/admin/BilingualField";
 import { apiFetch } from "@/lib/api";
 import { toast } from "sonner";
 
@@ -146,12 +147,22 @@ const AdminSettings = () => {
     switch (activeTab) {
       case "general": return (
         <div>
-          <Field label="Site Name" name="siteName" value={settings.siteName ?? ""} onChange={set} placeholder="rasel.cloud" />
-          <Field label="Tagline" name="tagline" value={settings.tagline ?? ""} onChange={set} placeholder="Digital Agency & Web Solutions" />
+          <BilingualField label="Site Name" nameEn="siteName" nameBn="siteName_bn"
+            valueEn={String(settings.siteName ?? "")} valueBn={String(settings.siteName_bn ?? "")}
+            onChange={(n, v) => set(n, v)} placeholder="rasel.cloud" placeholderBn="রাসেল ক্লাউড" />
+          <BilingualField label="Tagline" nameEn="tagline" nameBn="tagline_bn"
+            valueEn={String(settings.tagline ?? "")} valueBn={String(settings.tagline_bn ?? "")}
+            onChange={(n, v) => set(n, v)} placeholder="Digital Agency & Web Solutions" placeholderBn="ডিজিটাল এজেন্সি ও ওয়েব সমাধান" />
           <Field label="Logo URL" description="URL to your logo image (PNG/SVG recommended)" name="logoUrl" value={settings.logoUrl ?? ""} onChange={set} placeholder="https://..." />
           <Field label="Favicon URL" description="URL to your favicon (.ico or .png)" name="faviconUrl" value={settings.faviconUrl ?? ""} onChange={set} placeholder="https://..." />
-          <Field label="Footer Text" name="footerText" value={settings.footerText ?? ""} onChange={set} placeholder="© 2025 rasel.cloud. All rights reserved." />
-          <Field label="Announcement Bar Text" description="Shown as a top banner if enabled" name="announcementBar" value={settings.announcementBar ?? ""} onChange={set} type="textarea" placeholder="🎉 New: AI Agent packages now available! Check our services →" />
+          <BilingualField label="Footer Text" nameEn="footerText" nameBn="footerText_bn"
+            valueEn={String(settings.footerText ?? "")} valueBn={String(settings.footerText_bn ?? "")}
+            onChange={(n, v) => set(n, v)} placeholder="© 2025 rasel.cloud. All rights reserved." placeholderBn="© ২০২৫ রাসেল ক্লাউড। সর্বস্বত্ব সংরক্ষিত।" />
+          <BilingualField label="Announcement Bar Text" nameEn="announcementBar" nameBn="announcementBar_bn"
+            valueEn={String(settings.announcementBar ?? "")} valueBn={String(settings.announcementBar_bn ?? "")}
+            onChange={(n, v) => set(n, v)} type="textarea"
+            description="Shown as a top banner if enabled"
+            placeholder="🎉 New: AI Agent packages now available!" placeholderBn="🎉 নতুন: এআই প্যাকেজ এখন পাওয়া যাচ্ছে!" />
           <Field label="Enable Announcement Bar" name="announcementBarEnabled" value={settings.announcementBarEnabled ?? false} onChange={set} type="toggle" />
           <Field label="Maintenance Mode" description="Shows a maintenance page to all visitors" name="maintenanceMode" value={settings.maintenanceMode ?? false} onChange={set} type="toggle" />
         </div>
@@ -159,10 +170,22 @@ const AdminSettings = () => {
 
       case "hero": return (
         <div>
-          <Field label="Hero Heading" name="heroHeading" value={settings.heroHeading ?? ""} onChange={set} type="textarea" placeholder="We Build Digital Experiences That Drive Results" />
-          <Field label="Hero Subheading" name="heroSubheading" value={settings.heroSubheading ?? ""} onChange={set} type="textarea" placeholder="Custom websites, AI automation, SEO & social media management..." />
-          <Field label="Primary CTA Button Text" name="heroCtaText" value={settings.heroCtaText ?? ""} onChange={set} placeholder="Get Started" />
-          <Field label="Secondary CTA Button Text" name="heroCtaSecondaryText" value={settings.heroCtaSecondaryText ?? ""} onChange={set} placeholder="View Portfolio" />
+          <BilingualField label="Hero Heading" nameEn="heroHeading" nameBn="heroHeading_bn"
+            valueEn={String(settings.heroHeading ?? "")} valueBn={String(settings.heroHeading_bn ?? "")}
+            onChange={(n, v) => set(n, v)} type="textarea"
+            placeholder="We Build Digital Experiences That Drive Results"
+            placeholderBn="আমরা ডিজিটাল অভিজ্ঞতা তৈরি করি যা ফলাফল দেয়" />
+          <BilingualField label="Hero Subheading" nameEn="heroSubheading" nameBn="heroSubheading_bn"
+            valueEn={String(settings.heroSubheading ?? "")} valueBn={String(settings.heroSubheading_bn ?? "")}
+            onChange={(n, v) => set(n, v)} type="textarea"
+            placeholder="Custom websites, AI automation, SEO & social media management..."
+            placeholderBn="কাস্টম ওয়েবসাইট, এআই অটোমেশন, এসইও ও সোশ্যাল মিডিয়া ম্যানেজমেন্ট..." />
+          <BilingualField label="Primary CTA Button Text" nameEn="heroCtaText" nameBn="heroCtaText_bn"
+            valueEn={String(settings.heroCtaText ?? "")} valueBn={String(settings.heroCtaText_bn ?? "")}
+            onChange={(n, v) => set(n, v)} placeholder="Get Started" placeholderBn="শুরু করুন" />
+          <BilingualField label="Secondary CTA Button Text" nameEn="heroCtaSecondaryText" nameBn="heroCtaSecondaryText_bn"
+            valueEn={String(settings.heroCtaSecondaryText ?? "")} valueBn={String(settings.heroCtaSecondaryText_bn ?? "")}
+            onChange={(n, v) => set(n, v)} placeholder="View Portfolio" placeholderBn="পোর্টফোলিও দেখুন" />
         </div>
       );
 
@@ -170,7 +193,9 @@ const AdminSettings = () => {
         <div>
           <Field label="Contact Email" name="contactEmail" value={settings.contactEmail ?? ""} onChange={set} type="email" placeholder="hello@rasel.cloud" />
           <Field label="Contact Phone" name="contactPhone" value={settings.contactPhone ?? ""} onChange={set} type="tel" placeholder="+880 1700-000000" />
-          <Field label="Office Address" name="contactAddress" value={settings.contactAddress ?? ""} onChange={set} placeholder="Dhaka, Bangladesh" />
+          <BilingualField label="Office Address" nameEn="contactAddress" nameBn="contactAddress_bn"
+            valueEn={String(settings.contactAddress ?? "")} valueBn={String(settings.contactAddress_bn ?? "")}
+            onChange={(n, v) => set(n, v)} placeholder="Dhaka, Bangladesh" placeholderBn="ঢাকা, বাংলাদেশ" />
           <Field label="WhatsApp Number" description="Include country code, e.g. +8801700000000" name="whatsappNumber" value={settings.whatsappNumber ?? ""} onChange={set} placeholder="+8801700000000" />
         </div>
       );

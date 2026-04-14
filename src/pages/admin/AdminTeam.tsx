@@ -4,23 +4,24 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Plus, Edit2, Trash2, X, Github, Linkedin, Twitter } from "lucide-react";
 import AdminLayout from "@/components/admin/AdminLayout";
+import { BilingualField } from "@/components/admin/BilingualField";
 import { apiFetch } from "@/lib/api";
 import { toast } from "sonner";
 
 interface TeamMember {
   id: string;
-  name: string;
-  role: string;
+  name: string; name_bn?: string;
+  role: string; role_bn?: string;
   avatar: string;
   avatarUrl?: string;
-  bio?: string;
+  bio?: string; bio_bn?: string;
   github?: string;
   linkedin?: string;
   twitter?: string;
 }
 
 const empty = (): Partial<TeamMember> => ({
-  name: "", role: "", avatarUrl: "", bio: "", github: "", linkedin: "", twitter: "",
+  name: "", name_bn: "", role: "", role_bn: "", avatarUrl: "", bio: "", bio_bn: "", github: "", linkedin: "", twitter: "",
 });
 
 function Modal({ member, onClose, onSave, isSaving }: {
@@ -30,18 +31,19 @@ function Modal({ member, onClose, onSave, isSaving }: {
   isSaving: boolean;
 }) {
   const [form, setForm] = useState({ ...member });
-  
+  const set = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="bg-[#0f0f14] border border-white/10 rounded-2xl w-full max-w-md shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm overflow-y-auto">
+      <div className="bg-[#0f0f14] border border-white/10 rounded-2xl w-full max-w-lg shadow-2xl my-4">
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/5">
           <h2 className="font-semibold text-white">{member.id ? "Edit Team Member" : "Add Team Member"}</h2>
           <button onClick={onClose} className="p-1.5 text-white/40 hover:text-white"><X size={18} /></button>
         </div>
-        <div className="px-6 py-5 space-y-4">
+        <div className="px-6 py-5 max-h-[80vh] overflow-y-auto">
           {/* Avatar Preview */}
           {(form.avatarUrl || form.name) && (
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 mb-2">
               {form.avatarUrl ? (
                 <img src={form.avatarUrl} alt={form.name} className="w-16 h-16 rounded-full object-cover border-2 border-white/10" />
               ) : (
@@ -51,33 +53,31 @@ function Modal({ member, onClose, onSave, isSaving }: {
               )}
               <div>
                 <p className="text-sm font-semibold text-white">{form.name || "Name"}</p>
+                {form.name_bn && <p className="text-xs text-white/40 font-[Noto_Serif_Bengali,serif]">{form.name_bn}</p>}
                 <p className="text-xs text-white/40">{form.role || "Role"}</p>
               </div>
             </div>
           )}
 
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-xs font-medium text-white/60 mb-1.5">Full Name *</label>
-              <input value={form.name ?? ""} onChange={(e) => setForm({...form, name: e.target.value})} className="input-admin w-full" placeholder="Rasel Ahmed" required />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-white/60 mb-1.5">Role *</label>
-              <input value={form.role ?? ""} onChange={(e) => setForm({...form, role: e.target.value})} className="input-admin w-full" placeholder="Lead Developer" required />
-            </div>
-          </div>
+          <BilingualField label="Full Name" required nameEn="name" nameBn="name_bn"
+            valueEn={form.name ?? ""} valueBn={form.name_bn ?? ""} onChange={set}
+            placeholder="Rasel Ahmed" placeholderBn="রাসেল আহমেদ" />
 
-          <div>
+          <BilingualField label="Role / Title" required nameEn="role" nameBn="role_bn"
+            valueEn={form.role ?? ""} valueBn={form.role_bn ?? ""} onChange={set}
+            placeholder="Lead Developer" placeholderBn="প্রধান ডেভেলপার" />
+
+          <BilingualField label="Bio" nameEn="bio" nameBn="bio_bn"
+            valueEn={form.bio ?? ""} valueBn={form.bio_bn ?? ""} onChange={set}
+            type="textarea" rows={2}
+            placeholder="Short bio..." placeholderBn="সংক্ষিপ্ত পরিচিতি..." />
+
+          <div className="pt-3 border-t border-white/5">
             <label className="block text-xs font-medium text-white/60 mb-1.5">Photo URL (optional)</label>
-            <input value={form.avatarUrl ?? ""} onChange={(e) => setForm({...form, avatarUrl: e.target.value})} className="input-admin w-full" placeholder="https://..." />
+            <input value={form.avatarUrl ?? ""} onChange={(e) => set("avatarUrl", e.target.value)} className="input-admin w-full" placeholder="https://..." />
           </div>
 
-          <div>
-            <label className="block text-xs font-medium text-white/60 mb-1.5">Bio (optional)</label>
-            <textarea rows={2} value={form.bio ?? ""} onChange={(e) => setForm({...form, bio: e.target.value})} className="input-admin w-full resize-none" placeholder="Short bio..." />
-          </div>
-
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-3 gap-3 pt-3">
             {[
               { key: "github", icon: Github, placeholder: "github.com/..." },
               { key: "linkedin", icon: Linkedin, placeholder: "linkedin.com/in/..." },
@@ -89,7 +89,7 @@ function Modal({ member, onClose, onSave, isSaving }: {
                 </label>
                 <input
                   value={(form as Record<string, string | undefined>)[key] ?? ""}
-                  onChange={(e) => setForm({...form, [key]: e.target.value})}
+                  onChange={(e) => set(key, e.target.value)}
                   className="input-admin w-full"
                   placeholder={placeholder}
                 />
@@ -97,17 +97,12 @@ function Modal({ member, onClose, onSave, isSaving }: {
             ))}
           </div>
 
-          <div className="flex gap-3 pt-2">
-            <button
-              onClick={() => onSave(form)}
-              disabled={isSaving || !form.name || !form.role}
-              className="flex-1 py-2.5 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-50"
-            >
+          <div className="flex gap-3 pt-4">
+            <button onClick={() => onSave(form)} disabled={isSaving || !form.name || !form.role}
+              className="flex-1 py-2.5 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-50">
               {isSaving ? "Saving..." : member.id ? "Save Changes" : "Add Member"}
             </button>
-            <button onClick={onClose} className="px-5 py-2.5 border border-white/10 text-white/50 text-sm rounded-xl hover:border-white/20 hover:text-white transition-colors">
-              Cancel
-            </button>
+            <button onClick={onClose} className="px-5 py-2.5 border border-white/10 text-white/50 text-sm rounded-xl hover:border-white/20 hover:text-white transition-colors">Cancel</button>
           </div>
         </div>
       </div>
@@ -200,7 +195,8 @@ const AdminTeam = () => {
               )}
 
               <h3 className="font-bold text-white text-sm mb-0.5">{member.name}</h3>
-              <p className="text-xs text-white/40 mb-3">{member.role}</p>
+              {member.name_bn && <p className="text-[11px] text-white/30 font-[Noto_Serif_Bengali,serif] mb-0.5">{member.name_bn}</p>}
+              <p className="text-xs text-white/40 mb-3">{member.role_bn ? <><span>{member.role}</span><span className="mx-1 text-white/20">·</span><span className="font-[Noto_Serif_Bengali,serif]">{member.role_bn}</span></> : member.role}</p>
               {member.bio && <p className="text-xs text-white/30 leading-relaxed mb-3 line-clamp-2">{member.bio}</p>}
 
               <div className="flex justify-center gap-2">
