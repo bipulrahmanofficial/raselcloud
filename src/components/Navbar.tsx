@@ -202,6 +202,13 @@ const Navbar = () => {
                 })}
               </div>
             )}
+
+            {moreMenuOpen && (
+              <div className="fixed inset-0 z-40" onClick={() => setMoreMenuOpen(false)} />
+            )}
+          </div>
+        </div>
+
         {/* ─── Right: Desktop controls ─────────────────────────────────── */}
         <div className="hidden lg:flex items-center gap-2">
           {/* Language toggle pill — prominent in top bar */}
