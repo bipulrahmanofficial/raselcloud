@@ -5,7 +5,9 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useLangValue } from "@/hooks/useLangValue";
 import { useCountUp } from "@/hooks/useCountUp";
+import { useQuery } from "@tanstack/react-query";
 
 const DOTS = [
   { top: "8%",  left: "6%",  size: "w-1.5 h-1.5", opacity: "opacity-30" },
@@ -246,6 +248,7 @@ function StatsPopup({ anchor, onClose }: { anchor: "bottom-left" | "top-right"; 
 
 const HeroSection = () => {
   const { t } = useLanguage();
+  const lv = useLangValue();
   const reducedMotion = useReducedMotion();
   const [wordIndex, setWordIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
@@ -254,6 +257,17 @@ const HeroSection = () => {
   const [ratingOpen, setRatingOpen] = useState(false);
   const words = t.typewriterWords;
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Fetch site settings for bilingual hero content
+  const { data: settings } = useQuery<Record<string, string>>({
+    queryKey: ["/api/settings-public"],
+    queryFn: async () => {
+      const r = await fetch("/api/admin/settings");
+      if (!r.ok) return {};
+      return r.json();
+    },
+    staleTime: 120_000,
+  });
 
   useEffect(() => {
     if (reducedMotion) return;
@@ -372,8 +386,9 @@ const HeroSection = () => {
               className="text-gray-600 dark:text-white/55 text-base md:text-lg leading-relaxed mb-10 max-w-[480px] animate-fade-in-up"
               style={{ animationDelay: "250ms" }}
             >
-              Custom web solutions, AI automation, SEO growth &amp; creative media —
-              built for businesses of every scale.
+              {settings?.heroSubheading
+                ? lv(settings.heroSubheading, settings.heroSubheading_bn)
+                : "Custom web solutions, AI automation, SEO growth & creative media — built for businesses of every scale."}
             </p>
 
             {/* CTA buttons */}
@@ -391,7 +406,7 @@ const HeroSection = () => {
                 }}
               >
                 <Phone size={16} />
-                {t.heroCtaPrimary}
+                {settings?.heroCtaText ? lv(settings.heroCtaText, settings.heroCtaText_bn) : t.heroCtaPrimary}
               </Link>
               <Link
                 href="/services"
@@ -401,7 +416,7 @@ const HeroSection = () => {
                   dark:text-white/90 dark:border-white/15 dark:hover:border-white/35 dark:hover:bg-white/5 dark:hover:text-white"
                 style={{ backdropFilter: "blur(12px)" }}
               >
-                {t.heroCtaSecondary}
+                {settings?.heroCtaSecondaryText ? lv(settings.heroCtaSecondaryText, settings.heroCtaSecondaryText_bn) : t.heroCtaSecondary}
                 <ArrowRight size={16} />
               </Link>
             </div>
