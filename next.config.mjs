@@ -3,10 +3,6 @@ const nextConfig = {
   reactStrictMode: true,
   compress: true,
   poweredByHeader: false,
-  // src/pages/ contains React component files, NOT Next.js pages.
-  // All real routing is in app/ (App Router).
-  // This prevents Next.js from treating src/pages/ as Pages Router.
-  pageExtensions: ["page.tsx", "page.ts", "page.jsx", "page.js"],
   allowedDevOrigins: [
     // Replit
     "*.replit.dev",
