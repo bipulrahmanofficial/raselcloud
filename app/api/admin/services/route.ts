@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@lib/auth";
 import { listServices, listPackages, createService } from "@lib/firestore";
+import { getLocalServicesAll, getLocalPackages } from "@lib/local-data";
 
 const serviceSchema = z.object({
   title: z.string().min(2).max(200),
@@ -25,8 +26,20 @@ export async function GET(req: NextRequest) {
       packages: allPackages.filter((p) => p.serviceId === svc.id),
     }));
     return NextResponse.json(result);
-  } catch (err) {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  } catch {
+    // Firebase unavailable — fall back to local db-export.json (all services, incl. inactive)
+    try {
+      const svcs = getLocalServicesAll();
+      const pkgs = getLocalPackages();
+      const result = svcs.map((svc) => ({
+        ...svc,
+        packages: pkgs.filter((p) => p.serviceId === svc.id),
+      }));
+      return NextResponse.json(result);
+    } catch (localErr) {
+      console.error("Local fallback failed:", localErr);
+      return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    }
   }
 }
 

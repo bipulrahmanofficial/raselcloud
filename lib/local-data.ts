@@ -62,43 +62,46 @@ function loadExport(): DbExport {
   }
 }
 
-export function getLocalServices() {
+export function getLocalServicesAll() {
   const data = loadExport();
   const rows = data.tables.services?.rows ?? [];
   const pkgRows = data.tables.packages?.rows ?? [];
 
-  return rows
-    .filter((s) => s.is_active)
-    .map((s) => ({
-      id: s.id,
-      title: s.title,
-      slug: s.slug,
-      category: s.category,
-      description: s.description,
-      imageUrl: s.image_url ?? null,
-      tags: s.tags ?? [],
-      isActive: s.is_active,
-      createdAt: s.created_at,
-      packages: pkgRows
-        .filter((p) => p.service_id === s.id)
-        .map((p) => ({
-          id: p.id,
-          serviceId: s.id,
-          name: p.name,
-          tier: p.tier,
-          price: p.price,
-          features: p.features ?? [],
-          deliveryDays: p.delivery_days,
-          revisions: p.revisions ?? null,
-          isPopular: p.is_popular,
-          createdAt: p.created_at,
-        })),
-    }));
+  return rows.map((s) => ({
+    id: s.id,
+    title: s.title,
+    slug: s.slug,
+    category: s.category,
+    description: s.description,
+    imageUrl: s.image_url ?? null,
+    tags: s.tags ?? [],
+    isActive: s.is_active,
+    createdAt: s.created_at,
+    packages: pkgRows
+      .filter((p) => p.service_id === s.id)
+      .map((p) => ({
+        id: p.id,
+        serviceId: s.id,
+        name: p.name,
+        tier: p.tier,
+        price: p.price,
+        features: p.features ?? [],
+        deliveryDays: p.delivery_days,
+        revisions: p.revisions ?? null,
+        isPopular: p.is_popular,
+        createdAt: p.created_at,
+      })),
+  }));
+}
+
+export function getLocalServices() {
+  return getLocalServicesAll().filter((s) => s.isActive);
 }
 
 export function getLocalService(slug: string) {
-  return getLocalServices().find((s) => s.slug === slug) ?? null;
+  return getLocalServicesAll().find((s) => s.slug === slug) ?? null;
 }
+
 
 export function getLocalPackages(serviceId?: string) {
   const rows = loadExport().tables.packages?.rows ?? [];

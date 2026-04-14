@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@lib/auth";
 import { listAllPosts, createPost, findUserById } from "@lib/firestore";
+import { getLocalBlogPosts } from "@lib/local-data";
 import { z } from "zod";
 
 const createPostSchema = z.object({
@@ -42,9 +43,15 @@ export async function GET(req: NextRequest) {
       authorName: post.authorId ? (authorMap.get(post.authorId) ?? null) : null,
     }));
     return NextResponse.json(result);
-  } catch (err) {
-    console.error("GET /api/admin/blog error:", err);
-    return NextResponse.json({ error: "Failed to fetch posts" }, { status: 500 });
+  } catch {
+    // Firebase unavailable — fall back to local db-export.json (all posts incl. unpublished)
+    try {
+      const localPosts = getLocalBlogPosts();
+      return NextResponse.json(localPosts);
+    } catch (localErr) {
+      console.error("Local blog fallback failed:", localErr);
+      return NextResponse.json({ error: "Failed to fetch posts" }, { status: 500 });
+    }
   }
 }
 
@@ -78,6 +85,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: err.errors[0].message }, { status: 400 });
     }
     console.error("POST /api/admin/blog error:", err);
-    return NextResponse.json({ error: "Failed to create post" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to create post (Firebase not configured)" }, { status: 503 });
   }
 }

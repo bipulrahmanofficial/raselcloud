@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@lib/auth";
 import { listPackages, createPackage } from "@lib/firestore";
+import { getLocalPackages } from "@lib/local-data";
 
 const packageSchema = z.object({
   serviceId: z.string().min(1),
@@ -21,10 +22,16 @@ export async function GET(req: NextRequest) {
   try {
     const allPackages = await listPackages();
     return NextResponse.json(allPackages);
-  } catch (err) {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  } catch {
+    // Firebase unavailable — fall back to local db-export.json
+    try {
+      return NextResponse.json(getLocalPackages());
+    } catch {
+      return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    }
   }
 }
+
 
 export async function POST(req: NextRequest) {
   const { user, error, status } = await requireAdmin(req);
