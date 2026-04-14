@@ -2,6 +2,7 @@ import { Check, Clock, RefreshCw, Zap, ShoppingCart } from "lucide-react";
 import type { Package, Service } from "@/hooks/useServices";
 import { useCart } from "@/contexts/CartContext";
 import { useCurrency } from "@/contexts/CurrencyContext";
+import { useLangValue } from "@/hooks/useLangValue";
 import { toast } from "sonner";
 
 interface PackageCardProps {
@@ -13,20 +14,22 @@ interface PackageCardProps {
 const PackageCard = ({ pkg, service, index = 0 }: PackageCardProps) => {
   const { addItem, items } = useCart();
   const { formatPrice } = useCurrency();
+  const lv = useLangValue();
   const inCart = items.some((i) => i.id === pkg.id);
+  const displayName = lv(pkg.name, (pkg as Record<string,string>).name_bn);
 
   const handleOrder = () => {
     if (inCart) return;
     addItem({
       id: pkg.id,
       serviceId: service.id,
-      serviceName: service.title,
+      serviceName: lv(service.title, (service as Record<string,string>).title_bn),
       packageId: pkg.id,
-      packageName: pkg.name,
+      packageName: displayName,
       price: parseFloat(pkg.price),
       tier: pkg.tier,
     });
-    toast.success(`${pkg.name} package added to cart!`);
+    toast.success(`${displayName} package added to cart!`);
   };
 
   return (
@@ -47,7 +50,7 @@ const PackageCard = ({ pkg, service, index = 0 }: PackageCardProps) => {
       )}
 
       <div className="mb-6">
-        <h3 className="text-xl font-bold text-foreground mb-1" data-testid={`text-package-name-${pkg.id}`}>{pkg.name}</h3>
+        <h3 className="text-xl font-bold text-foreground mb-1" data-testid={`text-package-name-${pkg.id}`}>{displayName}</h3>
         <div className="text-4xl font-bold gradient-text mt-3">
           {formatPrice(parseFloat(pkg.price))}
           <span className="text-sm text-muted-foreground font-normal"> /project</span>

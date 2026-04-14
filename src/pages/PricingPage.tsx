@@ -6,6 +6,7 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useLangValue } from "@/hooks/useLangValue";
 import { useServicesWithPackages } from "@/hooks/useServices";
 import { useCurrency } from "@/contexts/CurrencyContext";
 
@@ -13,6 +14,7 @@ const tierOrder = { basic: 0, standard: 1, premium: 2 } as const;
 
 const PricingPage = () => {
   const { t } = useLanguage();
+  const lv = useLangValue();
   const { data: services, isLoading } = useServicesWithPackages();
   const { formatPrice } = useCurrency();
 
@@ -52,7 +54,7 @@ const PricingPage = () => {
                     <div className="flex items-center justify-between mb-6">
                       <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
                         <Package size={18} className="text-primary" />
-                        {svc.title}
+                        {lv(svc.title, (svc as Record<string,string>).title_bn)}
                       </h2>
                       <Link
                         href={`/services/${svc.slug}`}

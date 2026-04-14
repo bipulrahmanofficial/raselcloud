@@ -8,6 +8,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PackageCard from "@/components/PackageCard";
 import { useService } from "@/hooks/useServices";
+import { useLangValue } from "@/hooks/useLangValue";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const categoryIcons: Record<string, string> = {
@@ -20,6 +21,7 @@ const categoryIcons: Record<string, string> = {
 const ServiceDetailPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const { data: service, isLoading, isError } = useService(slug || "");
+  const lv = useLangValue();
 
   if (isLoading) {
     return (
@@ -110,8 +112,12 @@ const ServiceDetailPage = () => {
               ))}
             </div>
 
-            <h1 className="section-heading text-3xl md:text-4xl mb-4" data-testid="text-service-title">{service.title}</h1>
-            <p className="text-muted-foreground leading-relaxed max-w-2xl" data-testid="text-service-description">{service.description}</p>
+            <h1 className="section-heading text-3xl md:text-4xl mb-4" data-testid="text-service-title">
+              {lv(service.title, (service as Record<string,string>).title_bn)}
+            </h1>
+            <p className="text-muted-foreground leading-relaxed max-w-2xl" data-testid="text-service-description">
+              {lv(service.description, (service as Record<string,string>).description_bn)}
+            </p>
           </div>
 
           <div

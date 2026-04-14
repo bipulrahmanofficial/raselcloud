@@ -7,22 +7,20 @@ import { useLanguage } from "@/contexts/LanguageContext";
 const testimonials = [
   {
     name: "Arif Rahman",
-    role: { en: "E-commerce Business Owner", bn: "ই-কমার্স ব্যবসার মালিক", hi: "ई-कॉमर्स बिजनेस ओनर" },
+    role: { en: "E-commerce Business Owner", bn: "ই-কমার্স ব্যবসার মালিক" },
     text: {
       en: "Rasel built our entire WooCommerce checkout with bKash integration. Sales increased by 40% within the first month!",
-      bn: "রাসেল আমাদের সম্পূর্ণ WooCommerce চেকআউট বিকাশ ইন্টিগ্রেশন সহ তৈরি করেছে। প্রথম মাসেই বিক্রয় ৪০% বেড়েছে!",
-      hi: "रसेल ने bKash के साथ हमारा WooCommerce चेकआउट बनाया। पहले महीने में बिक्री 40% बढ़ी!",
+      bn: "রাসেল আমাদের সম্পূর্ণ WooCommerce চেকআউট বিকাশ ইন্টিগ্রেশন সহ তৈরি করেছে। প্রথম মাসেই বিক্রয় ৪০% বেড়েছে!",
     },
     rating: 5,
     avatar: "AR",
   },
   {
     name: "Dr. Nasrin Akter",
-    role: { en: "Healthcare Professional", bn: "স্বাস্থ্যসেবা পেশাদার", hi: "हेल्थकेयर प्रोफेशनल" },
+    role: { en: "Healthcare Professional", bn: "স্বাস্থ্যসেবা পেশাদার" },
     text: {
       en: "The medical dashboard is incredibly intuitive. Patient management has never been this smooth and efficient.",
       bn: "মেডিকেল ড্যাশবোর্ডটি অবিশ্বাস্যভাবে ব্যবহারবান্ধব। রোগী ব্যবস্থাপনা এত সহজ আর হয়নি।",
-      hi: "मेडिकल डैशबोर्ड अविश्वसनीय रूप से सहज है। रोगी प्रबंधन इतना आसान कभी नहीं था।",
     },
     rating: 5,
     avatar: "NA",
@@ -154,8 +152,8 @@ const TestimonialsSection = () => {
               </div>
 
               {/* Text */}
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed italic mb-5">
-                "{item.text[lang as "en" | "bn" | "hi"]}"
+              <p className="text-sm md:text-base text-muted-foreground leading-relaxed italic mb-5" suppressHydrationWarning>
+                "{item.text[lang as "en" | "bn"] ?? item.text.en}"
               </p>
 
               {/* Author */}
@@ -165,8 +163,8 @@ const TestimonialsSection = () => {
                 </div>
                 <div>
                   <div className="text-sm font-semibold text-foreground">{item.name}</div>
-                  <div className="text-xs text-muted-foreground">
-                    {item.role[lang as "en" | "bn" | "hi"]}
+                  <div className="text-xs text-muted-foreground" suppressHydrationWarning>
+                    {item.role[lang as "en" | "bn"] ?? item.role.en}
                   </div>
                 </div>
               </div>
