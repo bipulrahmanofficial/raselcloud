@@ -1,4 +1,5 @@
 import { getFirestoreDb } from "./firebase-admin";
+import { readLocalServices, getActiveLocalServices } from "./local-services-store";
 import type { Firestore, DocumentSnapshot, QueryDocumentSnapshot } from "firebase-admin/firestore";
 
 function db(): Firestore {
@@ -196,14 +197,33 @@ export async function listServices(activeOnly = true): Promise<FSService[]> {
 }
 
 export async function findServiceBySlug(slug: string): Promise<FSService | null> {
-  // Only filter by slug (equality) — checking isActive in code avoids a composite index
-  const snaps = await db().collection(SERVICES)
-    .where("slug", "==", slug)
-    .limit(1)
-    .get();
-  if (snaps.empty) return null;
-  const svc = normalizeService(snaps.docs[0]);
-  return svc.isActive ? svc : null;
+  try {
+    // Only filter by slug (equality) — checking isActive in code avoids a composite index
+    const snaps = await db().collection(SERVICES)
+      .where("slug", "==", slug)
+      .limit(1)
+      .get();
+    if (snaps.empty) return null;
+    const svc = normalizeService(snaps.docs[0]);
+    return svc.isActive ? svc : null;
+  } catch {
+    // Firebase unavailable — fall back to local JSON store
+    const locals = getActiveLocalServices();
+    const found = locals.find((s) => s.slug === slug);
+    if (!found) return null;
+    return {
+      id: found.id,
+      title: found.title,
+      slug: found.slug,
+      category: found.category,
+      description: found.description,
+      imageUrl: found.imageUrl,
+      tags: found.tags,
+      isActive: found.isActive,
+      createdAt: found.createdAt,
+      packages: [],
+    } as FSService;
+  }
 }
 
 export async function findServiceById(id: string): Promise<FSService | null> {
