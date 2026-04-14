@@ -239,7 +239,7 @@ const PortfolioPage = () => {
               <span className="gradient-text">{t.portfolioHeadingHighlight ?? "Showcase"}</span>
             </h1>
             <p className="text-muted-foreground max-w-xl mx-auto text-sm md:text-base" suppressHydrationWarning>
-              {lv("Real projects. Real results. Click any card to see the full case study.", "\u09ac\u09be\u09b8\u09cd\u09a4\u09ac \u09aa\u09cd\u09b0\u099c\u09c7\u0995\u09cd\u099f\u2c \u09ac\u09be\u09b8\u09cd\u09a4\u09ac \u09ab\u09b2\u09be\u09ab\u09b2\u0964 \u09af\u09c7\u0995\u09cb\u09a8\u09cb \u0995\u09be\u09b0\u09cd\u09a1\u09c7 \u0995\u09cd\u09b2\u09bf\u0995 \u0995\u09b0\u09c1\u09a8\u0964")}
+              {lv("Real projects. Real results. Click any card to see the full case study.", "বাস্তব প্রজেক্ট, বাস্তব ফলাফল। যেকোনো কার্ডে ক্লিক করুন।")}
             </p>
           </div>
 

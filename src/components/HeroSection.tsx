@@ -208,7 +208,7 @@ function StatsPopup({ anchor, onClose }: { anchor: "bottom-left" | "top-right"; 
           <div key={s.labelKey} className="flex flex-col items-center justify-center py-4 px-3 bg-white dark:bg-[#111]">
             <span className="text-2xl font-black" style={{ color: s.color }}>{s.value}</span>
             <span className="text-[11px] text-gray-500 dark:text-white/45 mt-1 text-center leading-tight" suppressHydrationWarning>
-              {t[s.labelKey as keyof typeof t] as string}
+              {String(t[s.labelKey as keyof typeof t] ?? s.labelKey)}
             </span>
           </div>
         ))}
