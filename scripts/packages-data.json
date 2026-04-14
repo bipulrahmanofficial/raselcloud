@@ -3,7 +3,7 @@
     "id": "0880331f-627e-4ff2-9dd1-b8f39ac18782",
     "serviceId": "7034a7f3-c06c-46b8-8097-8c4d3d352c37",
     "name": "Basic",
-    "name_bn": "",
+    "name_bn": "www",
     "tier": "basic",
     "price": "499",
     "features": [
@@ -66,7 +66,7 @@
     "id": "c2e7f7e6-1915-4605-8935-facccc424c95",
     "serviceId": "7d0d6173-ae0c-47d4-a521-f5d488c2b439",
     "name": "Basic",
-    "name_bn": "",
+    "name_bn": "fucku",
     "tier": "basic",
     "price": "399",
     "features": [
@@ -129,9 +129,9 @@
     "id": "fbcfac0a-6992-4325-8a0a-e19eef4c9c56",
     "serviceId": "2bcd71d2-ab69-45c1-9d14-c174da9a70d6",
     "name": "Basic",
-    "name_bn": "",
+    "name_bn": "ffff",
     "tier": "basic",
-    "price": "299",
+    "price": "298.98",
     "features": [
       "SEO audit report",
       "Keyword research (50)",
